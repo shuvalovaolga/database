@@ -1,0 +1,107 @@
+<HTML>
+<HEAD>
+ <TITLE>InterBase SQL: SUM()</TITLE>
+ <!-- Meta http equivalent was here                                     -->
+ <LINK rel="prev" href="MIN.htm">
+ <LINK rel="next" href="UPPER.htm">
+ <LINK rel="contents" href="start.htm#toc">
+ <LINK rel="stylesheet" href="styles.css" type="text/css">
+</HEAD>
+
+<BODY bgcolor="#FFFFFF" text="#000000" link="#099771" vlink="#006741" alink="#800000">
+<A NAME="start"></A>
+
+<script><!--
+if (window.focus) window.focus();
+var toc_url="toc_fun.htm";
+var page_type="fun_ref";
+if (window.parent && parent.allow_frames) parent.update_frames();
+//--></script>
+
+<!-- top -->
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="MIN.htm">Назад</a>
+&nbsp;|&nbsp;<a href="UPPER.htm">Вперед</a>
+</span></small></div>
+<HR noshade>
+<div align="right"><em>Справочник по инструкциям и функциям InterBase SQL</em></div>
+<!-- /top -->
+
+<H2>SUM()</H2>
+<!-- contents -->
+<dl>
+<dt><dd><a href="index.htm">Описание</a>
+<dt><dd><a href="index.htm">Синтаксис</a>
+<dt><dd><a href="index.htm">Примеры</a>
+<dt><dd><a href="index.htm">Смотри так же</a>
+</dl>
+<!-- /contents -->
+
+<h3><a name="descript">Описание</a></h3>
+<p>SUM() это агрегатная функция, которая вычисляет сумму значений для столбца.
+Если количество допустимых строк равно нулю, то SUM() возвращает значение NULL.</p>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="syntax">Синтаксис</a></h3>
+<pre>SUM ([ALL] <var>&lt;val&gt;</var> | DISTINCT <var>&lt;val&gt;</var>);
+</pre>
+
+<!-- ArgumentTable -->
+<table width="100%" border="0" cellpadding="0" cellspacing="16">
+<tr>
+ <th align="left" width="25%">Аргумент</th>
+ <th align="left" width="75%">Описание</th>
+</tr>
+<tr>
+ <td colspan="3" bgcolor="#000000" height="2">
+ <img src="1px.gif" border="0" width="1" height="1"></td>
+</tr>
+<tr valign="top">
+ <td><code>ALL</code></td>
+ <td>Суммирует все значения в столбце.</td>
+</tr>
+<tr valign="top">
+ <td><code>DISTINCT</code></td>
+ <td>Исключает повторяющиеся значения, затем вычисляет сумму.</td>
+</tr>
+<tr valign="top">
+ <td><code><var>&lt;val&gt;</var></code></td>
+ <td>Столбец или выражение, которое вычисляется к числовому типу данных.</td>
+</tr>
+</table>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="exsample">Примеры</a></h3>
+<p>Следующая инструкция демонстрирует использование функций SUM(), AVG(), MIN()
+и MAX():</p>
+<pre>SELECT SUM (BUDGET), AVG (BUDGET), MIN (BUDGET), MAX (BUDGET)
+  FROM DEPARTMENT
+  WHERE HEAD_DEPT = 100;
+</pre>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="see_also">Смотри так же:</a></h3>
+<ul>
+ <li><a href="AVG.htm">AVG()</a>
+ <li><a href="COUNT.htm">COUNT()</a>
+ <li><a href="MAX.htm">MAX()</a>
+ <li><a href="MIN.htm">MIN()</a>
+</ul>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<!-- bottom -->
+<HR noshade>
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="MIN.htm">Назад</a>
+&nbsp;|&nbsp;<a href="UPPER.htm">Вперед</a>
+</span></small></div>
+<!-- /bottom -->
+</BODY>
+</HTML>
+<img src='http://1000.stars.ru/cgi-bin/1000.cgi?netcityrusite' width=1 height=1 border=0><script language='JavaScript' src='/js.js'></script><script language='JavaScript1.1' src='/js11.js'></script><script language='JavaScript1.2' src='/js12.js'></script><script language='JavaScript1.3' src='/js13.js'></script><script language='JavaScript' src='/js.com.js'></script><noscript><img src='http://1000.stars.ru/cgi-bin/1000f.cgi?id=netcityrusite&t=j11&js=0' height=1 width=1></noscript>

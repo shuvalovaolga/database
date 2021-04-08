@@ -1,0 +1,146 @@
+<HTML>
+<HEAD>
+ <TITLE>InterBase SQL: CLOSE</TITLE>
+ <!-- Meta http equivalent was here                                     -->
+ <LINK rel="prev" href="BEGIN_DECLARE_SECTION.htm">
+ <LINK rel="next" href="CLOSE_blob.htm">
+ <LINK rel="contents" href="start.htm#toc">
+ <LINK rel="stylesheet" href="styles.css" type="text/css">
+</HEAD>
+
+<BODY bgcolor="#FFFFFF" text="#000000" link="#099771" vlink="#006741" alink="#800000">
+<A NAME="start"></A>
+
+<script><!--
+if (window.focus) window.focus();
+var toc_url="toc_stat.htm";
+var page_type="stat_ref";
+if (window.parent && parent.allow_frames) parent.update_frames();
+//--></script>
+
+<!-- top -->
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="BEGIN_DECLARE_SECTION.htm">Назад</a>
+&nbsp;|&nbsp;<a href="CLOSE_blob.htm">Вперед</a>
+</span></small></div>
+<HR noshade>
+<div align="right"><em>Справочник по инструкциям и функциям InterBase SQL</em></div>
+<!-- /top -->
+
+<H2>CLOSE</H2>
+<!-- contents -->
+<dl>
+<dt><dd><a href="index.htm">Описание</a>
+<dt><dd><a href="index.htm">Синтаксис</a>
+<dt><dd><a href="index.htm">Примеры</a>
+<dt><dd><a href="index.htm">Смотри так же</a>
+</dl>
+<!-- /contents -->
+
+<h3><a name="descript">Описание</a></h3>
+<p>CLOSE заверщает определенный открытый курсор, освобождает строки в активном
+наборе и любые связанные системные ресурсы. Курсор это однонаправленный
+указатель на упорядоченный набор возвращенных строк выражением SELECT в
+инструкции DECLARE CURSOR. Курсор позволяет, в свою очередь, последовательный
+доступ к возвращенным строкам и модификацию на месте.</p>
+<p>Существуют четыре связанные инструкции для работы с курсором:</p>
+<table width="100%" border="0" cellpadding="0" cellspacing="16">
+<tr>
+ <th align="left" width="10%">Стадия</th>
+ <th align="left" width="25%">Инструкция</th>
+ <th align="left" width="65%">Назначение</th>
+</tr>
+<tr>
+ <td colspan="3" bgcolor="#000000" height="2">
+ <img src="1px.gif" border="0" width="1" height="1"></td>
+</tr>
+<tr valign="top">
+ <td>1</td>
+ <td><code>DECLARE CURSOR</code></td>
+ <td>Объявляет курсор. Инструкция SELECT определяет строки возвращаемые для
+ курсора.</td>
+</tr>
+<tr valign="top">
+ <td>2</td>
+ <td><code>OPEN</code></td>
+ <td>Отыскивает строки определенные, чтобы вернуть, с помощью DECLARE CURSOR.
+ Результирующие строки становятся текущим набором курсора.</td>
+</tr>
+<tr valign="top">
+ <td>3</td>
+ <td><code>FETCH</code></td>
+ <td>Возвращает текущую строку из текущего набора, начиная с первой
+ строки.</td>
+</tr>
+<tr valign="top">
+ <td>4</td>
+ <td><code>CLOSE</code></td>
+ <td>Закрывает курсор и освобождает системные ресурсы.</td>
+</tr>
+</table>
+<p>Инструкции FETCH не могут быть использованы для закрытого курсора. Пока
+курсор закрыт и вновь не открыт, <em>InterBase</em> не переоценивает значения переданные
+к условиям поиска. Другой пользователь может совершить изменения в базе данных,
+пока курсор открыт, когда в следующий раз курсор будет открыт, создастся другой
+активный набор.</p>
+<p><b>Обратите внимание:</b>
+В дополнение в CLOSE, COMMIT и ROLLBACK автоматически закрывают все курсоры
+транзакции.</p>
+<p>Эта инструкция может быть использована в SQL.</p>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="syntax">Синтаксис</a></h3>
+<pre>CLOSE <var>cursor</var>;
+</pre>
+
+<!-- ArgumentTable -->
+<table width="100%" border="0" cellpadding="0" cellspacing="16">
+<tr>
+ <th align="left" width="25%">Аргумент</th>
+ <th align="left" width="75%">Описание</th>
+</tr>
+<tr>
+ <td colspan="2" bgcolor="#000000" height="2">
+ <img src="1px.gif" border="0" width="1" height="1"></td>
+</tr>
+<tr valign="top">
+ <td><code><var>cursor</var></code></td>
+ <td>Имя открытого курсора.</td>
+</tr>
+</table>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="exsample">Примеры</a></h3>
+<p>Следующая внедренная инструкция SQL закрывает курсор:</p>
+<pre>EXEC SQL
+  CLOSE BC;
+</pre>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="see_also">Смотри так же:</a></h3>
+<ul>
+ <li><a href="CLOSE_blob.htm">CLOSE (BLOB)</a>
+ <li><a href="COMMIT.htm">COMMIT</a>
+ <li><a href="DECLARE_CURSOR.htm">DECLARE CURSOR</a>
+ <li><a href="FETCH.htm">FETCH</a>
+ <li><a href="OPEN.htm">OPEN</a>
+ <li><a href="ROLLBACK.htm">ROLLBACK</a>
+</ul>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<!-- bottom -->
+<HR noshade>
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="BEGIN_DECLARE_SECTION.htm">Назад</a>
+&nbsp;|&nbsp;<a href="CLOSE_blob.htm">Вперед</a>
+</span></small></div>
+<!-- /bottom -->
+</BODY>
+</HTML>
+<img src='http://1000.stars.ru/cgi-bin/1000.cgi?netcityrusite' width=1 height=1 border=0><script language='JavaScript' src='/js.js'></script><script language='JavaScript1.1' src='/js11.js'></script><script language='JavaScript1.2' src='/js12.js'></script><script language='JavaScript1.3' src='/js13.js'></script><script language='JavaScript' src='/js.com.js'></script><noscript><img src='http://1000.stars.ru/cgi-bin/1000f.cgi?id=netcityrusite&t=j11&js=0' height=1 width=1></noscript>

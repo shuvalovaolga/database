@@ -1,0 +1,350 @@
+<HTML>
+<HEAD>
+ <TITLE>InterBase SQL: CREATE TABLE</TITLE>
+ <!-- Meta http equivalent was here                                     -->
+ <LINK rel="prev" href="CREATE_SHADOW.htm">
+ <LINK rel="next" href="CREATE_TRIGGER.htm">
+ <LINK rel="contents" href="start.htm#toc">
+ <LINK rel="stylesheet" href="styles.css" type="text/css">
+</HEAD>
+
+<BODY bgcolor="#FFFFFF" text="#000000" link="#099771" vlink="#006741" alink="#800000">
+<A NAME="start"></A>
+
+<script><!--
+if (window.focus) window.focus();
+var toc_url="toc_stat.htm";
+var page_type="stat_ref";
+if (window.parent && parent.allow_frames) parent.update_frames();
+//--></script>
+
+<!-- top -->
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="CREATE_SHADOW.htm">Назад</a>
+&nbsp;|&nbsp;<a href="CREATE_TRIGGER.htm">Вперед</a>
+</span></small></div>
+<HR noshade>
+<div align="right"><em>Справочник по инструкциям и функциям InterBase SQL</em></div>
+<!-- /top -->
+
+<H2>CREATE TABLE</H2>
+<!-- contents -->
+<dl>
+<dt><dd><a href="index.htm">Описание</a>
+<dt><dd><a href="index.htm">Синтаксис</a>
+<dt><dd><a href="index.htm">Примеры</a>
+<dt><dd><a href="index.htm">Смотри так же</a>
+</dl>
+<!-- /contents -->
+
+<h3><a name="descript">Описание</a></h3>
+<p>CREATE TABLE устанавливает новую таблицу, ее столбцы и ограничения целостности
+в существующей базе данных. Пользователь, который создает таблицу, становится
+владельцем таблицы и получает полные привилегии для этого, включая возможность
+предоставления (GRANT) привилегий другим пользователям, триггерам, и сохраненным
+процедурам.</p>
+<p>CREATE TABLE поддерживает несколько опций для определения столбцов:</p>
+<ul>
+<li>Локальные столбцы определяющие имя и тип данных для данных введенных в столбец.
+<li>Вычисляемые столбцы, базирующиеся на расширении. Значение столбца вычисляется
+каждый раз при доступе к таблице. Если тип данных не определен, <em>InterBase</em>
+вычисляет как соответствующий. Столбцы, к которым обращается выражение, должны
+существовать раньше, чем столбец может быть определен.
+<li>Основанные на доменах столбцы, наследуемые все характеристики домена, но
+определение столбца может включать новое значение по умолчанию, атрибут NOT
+NULL, дополнительные ограничения CHECK или переопределять порядок сортировки,
+которые отменяют определение домена.
+<li>Описание типа данных для столбца типа CHAR, VARCHAR или BLOB-техт может
+включать предложение CHARACTER SET определяя специфическую кодировку для
+одиночного столбца. Иначе столбец использует определенную по умолчанию для базы
+данных кодировку. Если кодировка базы данных изменена, все столбцы впоследствии
+определенные имеют новую кодировку, но существующие столбцы не изменяются.
+</ul>
+<p>Предложение COLLATE позволяет указать специфический порядок сортировки для
+типов данных CHAR, VARCAHR и BLOB-текст. Выбор порядка сортировки ограничен теми
+которые поддерживаются для данной кодировки столбца, это или кодировка по
+умолчанию для базы данных в целом или другая установленная в предложении
+CHARACTER SET как часть определения типа данных. Смотри <em>Language
+Reference</em>, чтобы получить полный список возможных сортировок.</p>
+<p>Атрибут NOT NULL предотвращает ввод NULL или неизвестного значения в столбец.
+Атрибут NOT NULL проявляется во всех INSERT и UPDATE операциях над столбцом.</p>
+<p>Ограничения целостности могут быть определены для таблицы, когда она создана.
+Ограничения целостности это правила, которые контролируют базу данных и ее компоненты,
+связи типа столбец-таблица и таблица-таблица, и проверку вводимых данных.
+Они охватывают все транзакции к базе данных и автоматически поддерживаются системой.
+CREATE TABLE может создавать следующие типы ограничений целостности:</p>
+<ul>
+<li>PRIMARY KEY (первичный ключ) - уникально идентифицирует каждую строку
+таблицы. Значение в этом столбце либо в упорядоченном наборе столбцов не могут
+повторятся в более чем одной строке. Столбец PRIMARY KEY должен быть определен
+только с атрибутом NOT NULL. Таблица может иметь только один PRIMARY KEY, который
+может быть определен на одном или более столбцов.
+<li>UNIQUE (уникальные) ключи гарантируют, что не существует двух строк имеющих
+одно и тоже значение в специфическом столбце или упорядоченном наборе столбцов.
+Уникальный столбец должен быть определен с атрибутом NOT NULL. Таблица может
+иметь один или более UNIQUE ключей. UNIQUE ключ может быть использован FOREIGN
+KEY (внешний ключ) в другой таблице.
+<li>Справочные ограничения гарантируют, что значения в наборе столбцов, которые
+определены в FOREIGN KEY принимают те же самые значения, которые присутствуют в
+столбце UNIQUE или PRIMARY KEY в справочной таблице.
+<li>CHECK ограничения предписывают <var>&lt;search_condition&gt;</var>, которые
+должны принимать значение истинно для добавленных или измененных данных.
+<var>&lt;search_condition&gt;</var> могут требовать некоторой комбинации или
+порядка значений или равенства значению, введенному в другие столбцы.
+</ul>
+<p>Для не именованных ограничений, система создает уникальное имя сохраненное в
+системной таблице RDB$RELATION_CONSTRAINTS.</p>
+<p><b>Обратите внимание:</b>
+Ограничения не допустимы на выражениях.</p>
+<p>Оция EXTERNA FILE создает таблицу, чьи данные постоянно расположены во внешней
+таблице или файле, а не в базе данных InteBase. Используйте эту опций для:</p>
+<ul>
+<li>Определения таблицы <em>InterBase</em>, состоящей из столбцов и данных из внешних
+источников, таких как данные в файлах управляемых другой операционной системой
+или приложениями, не являющимися базами данных.
+<li>Передачи данных в существующую таблицу <em>InterBase</em> из внешнего файла.
+</ul>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="syntax">Синтаксис</a></h3>
+<!-- SyntaxCode -->
+<pre>CREATE TABLE <var>table</var> [EXTERNAL [FILE] "<var>&lt;filespec&gt;</var>"]
+(<var>&lt;col_def&gt;</var> [, <var>&lt;col_def&gt;</var> | <var>&lt;tconstraint&gt;</var> ...]);
+
+<var>&lt;col_def&gt;</var> = <var>col</var> {datatype | COMPUTED [BY] (<var>&lt;expr&gt;</var>) | <var>domain</var>}
+[DEFAULT {<var>literal</var> | NULL | USER}]
+  [NOT NULL] [<var>&lt;col_constraint&gt;</var>]
+  [COLLATE <var>collation</var>]
+</pre>
+<p><b>Обратите внимание:</b>
+Предложение COLLATE не может быть определено для столбцов BLOB.</p>
+
+<pre><var>&lt;datatype&gt;</var> = {
+{SMALLINT | INTEGER | FLOAT | DOUBLE PRECISION} [<var>&lt;array_dim&gt;</var>]
+  | {DECIMAL | NUMERIC} [(<var>precision</var> [, <var>scale</var>])] [<var>&lt;array_dim&gt;</var>]
+  | DATE [<var>&lt;array_dim&gt;</var>]
+  | {CHAR | CHARACTER | CHARACTER VARYING | VARCHAR}
+    [(int)] [<var>&lt;array_dim&gt;</var>] [CHARACTER SET <var>charname</var>]
+  | {NCHAR | NATIONAL CHARACTER | NATIONAL CHAR}
+    [VARYING] [(int)] [<var>&lt;array_dim&gt;</var>]
+  | BLOB [SUB_TYPE {<var>int</var> | <var>subtype_name</var>}] [SEGMENT SIZE <var>int</var>]
+    [CHARACTER SET <var>charname</var>]
+  | BLOB [(<var>seglen</var> [, <var>subtype</var>])]
+  }
+
+<var>&lt;array_dim&gt;</var> = <b>[</b>x:y [, x:y ...]<b>]</b>
+</pre>
+<p><b>Обратите внимание:</b>
+Внешние скобки (выделены жирным) должны быть включены в объявление массивов.</p>
+
+<pre><var>&lt;expr&gt;</var> = Допустимое выражение SQL, которое возвращает единственное значение.
+
+<var>&lt;col_constraint&gt;</var> = [CONSTRAINT constraint] <var>&lt;constraint_def&gt;</var>
+[<var>&lt;col_constraint&gt;</var>]
+
+<var>&lt;constraint_def&gt;</var> = {UNIQUE | PRIMARY KEY
+| CHECK (<var>&lt;search_condition&gt;</var>)
+  | REFERENCES other_table [(<var>other_col</var> [, <var>other_col</var> ...])]}
+
+<var>&lt;tconstraint&gt;</var> = CONSTRAINT constraint <var>&lt;tconstraint_def&gt;</var>
+[<var>&lt;tconstraint&gt;</var>]
+
+<var>&lt;tconstraint_def&gt;</var> = {{PRIMARY KEY | UNIQUE} (<var>col</var> [, <var>col</var> ...])
+| FOREIGN KEY (<var>col</var> [, <var>col</var> ...]) REFERENCES other_table
+  | CHECK (<var>&lt;search_condition&gt;</var>)}
+
+<var>&lt;search_condition&gt;</var> =
+{<var>&lt;val&gt;</var> <var>&lt;operator&gt;</var> {<var>&lt;val&gt;</var> | (<var>&lt;select_one&gt;</var>)}
+  | <var>&lt;val&gt;</var> [NOT] BETWEEN <var>&lt;val&gt;</var> AND <var>&lt;val&gt;</var>
+  | <var>&lt;val&gt;</var> [NOT] LIKE <var>&lt;val&gt;</var> [ESCAPE <var>&lt;val&gt;</var>]
+  | <var>&lt;val&gt;</var> [NOT] IN (<var>&lt;val&gt;</var> [, <var>&lt;val&gt;</var> ...] | <var>&lt;select_list&gt;</var>)
+  | <var>&lt;val&gt;</var> IS [NOT] NULL
+  | <var>&lt;val&gt;</var> {[NOT] {= | &lt; | &gt;} | &gt;= | &lt;=}
+    {ALL | SOME | ANY} (<var>&lt;select_list&gt;</var>)
+  | EXISTS (<var>&lt;select_expr&gt;</var>)
+  | SINGULAR (<var>&lt;select_expr&gt;</var>)
+  | <var>&lt;val&gt;</var> [NOT] CONTAINING <var>&lt;val&gt;</var>
+  | <var>&lt;val&gt;</var> [NOT] STARTING [WITH] <var>&lt;val&gt;</var>
+  | (<var>&lt;search_condition&gt;</var>)
+  | NOT <var>&lt;search_condition&gt;</var>
+  | <var>&lt;search_condition&gt;</var> OR <var>&lt;search_condition&gt;</var>
+  | <var>&lt;search_condition&gt;</var> AND <var>&lt;search_condition&gt;</var>}
+
+<var>&lt;val&gt;</var> = {
+col [<var>&lt;array_dim&gt;</var>] | <var>&lt;constant&gt;</var> | <var>&lt;expr&gt;</var> | <var>&lt;function&gt;</var>
+   | NULL | USER | RDB$DB_KEY
+  } [COLLATE <var>collation</var>]
+
+<var>&lt;constant&gt;</var> = <var>num</var> | "<var>string</var>" | <var>charsetname</var> "<var>string</var>"
+
+<var>&lt;function&gt;</var> = {
+COUNT (* | [ALL] <var>&lt;val&gt;</var> | DISTINCT <var>&lt;val&gt;</var>)
+  | SUM ([ALL] <var>&lt;val&gt;</var> | DISTINCT <var>&lt;val&gt;</var>)
+  | AVG ([ALL] <var>&lt;val&gt;</var> | DISTINCT <var>&lt;val&gt;</var>)
+  | MAX ([ALL] <var>&lt;val&gt;</var> | DISTINCT <var>&lt;val&gt;</var>)
+  | MIN ([ALL] <var>&lt;val&gt;</var> | DISTINCT <var>&lt;val&gt;</var>)
+  | CAST (<var>&lt;val&gt;</var> AS <var>&lt;datatype&gt;</var>)
+  | UPPER (<var>&lt;val&gt;</var>)
+  | GEN_ID (<var>generator</var>, <var>&lt;val&gt;</var>)
+  }
+
+<var>&lt;operator&gt;</var> = {= | &lt; | &gt; | &lt;= | &gt;= | !&lt; | !&gt; | &lt;&gt; | !=}
+
+<var>&lt;select_one&gt;</var> = SELECT (выбор) на одном столбце, который возвращает точно одно значение.
+
+<var>&lt;select_list&gt;</var> = SELECT на одном столбце, который возвращает ноль или более значений.
+
+<var>&lt;select_expr&gt;</var> = SELECT на списке значений, который возвращает ноль или более значений.
+</pre>
+
+<!-- ArgumentTable -->
+<table width="100%" border="0" cellpadding="0" cellspacing="16">
+<tr>
+ <th align="left" width="25%">Аргумент</th>
+ <th align="left" width="75%">Описание</th>
+</tr>
+<tr>
+ <td colspan="3" bgcolor="#000000" height="2"><img src="1px.gif" border="0" width="1" height="1"></td>
+</tr>
+<tr valign="top">
+ <td><code><var>table</var></code></td>
+ <td>Имя для таблицы. Имя таблицы должно быть уникальным среди имен таблиц и
+ процедур в базе данных.</td>
+</tr>
+<tr valign="top">
+ <td><code>EXTERNAL [FILE] "<var>&lt;filespec&gt;</var>"</code></td>
+ <td>Объявляет что данные для создаваемой таблицы, постоянно располагаются во
+ внешней к базе данных таблице или файле.</td>
+</tr>
+<tr valign="top">
+ <td><code><var>col</var></code></td>
+ <td>Имя для столбца таблицы, должно быть уникальным именем в таблице.</td>
+</tr>
+<tr valign="top">
+ <td><code><var>&lt;datatype&gt;</var></code></td>
+ <td>SQL тип данных столбца.</td>
+</tr>
+<tr valign="top">
+ <td><code>COMPUTED [BY] (<var>&lt;expr&gt;</var>)</code></td>
+ <td>Базирует определение столбца на выражении. Выражение должно возвращать
+ одиночное значение, и не иметь тип массива или возвращать массив.<br>
+ <var>&lt;expr&gt;</var> - любое арифметическое выражение допустимое для типа типа
+ данных столбца.</td>
+</tr>
+<tr valign="top">
+ <td><code><var>domain</var></code></td>
+ <td>Имя существующего домена.</td>
+</tr>
+<tr valign="top">
+ <td><code>COLLATE <var>collation</var></code></td>
+ <td>Определяет порядок сортировки для столбца. Порядок сортировки на уровне
+ столбца отменяет порядок сортировки определенный на уроне домена</td>
+</tr>
+<tr valign="top">
+ <td><code>DEFAULT</code></td>
+ <td>Определяет значение по умолчанию столбца, которое вводится когда не сделано
+ ни каких других вводов. Значения:
+ <ul>
+  <li><var>literal</var>:  Вставляется специфическая строка, числовое значение
+  или дата.
+  <li>NULL: Вводится значение NULL.
+  <li>USER: Вводится имя текущего пользователя. Столбец должен быть совместимого
+  текстового типа, для использования значения по умолчанию.
+ </ul>
+ Установка значению по умолчанию на уровне столбца отменяет значение по
+ умолчанию на уровне домена</td>
+</tr valign="top">
+<tr valign="top">
+ <td><code>CONSTRAINT <var>constraint</var></code></td>
+ <td>Помещает именованное ограничение на таблицу или столбец. Ограничение это
+ правило применяемое к структуре или контексту таблицы. Если это предложение
+ опущено, <em>InterBase</em> создает системное имя для ограничения.</td>
+</tr>
+</table>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="exsample">Примеры</a></h3>
+<p>Следующая инструкция создает одиночную таблицу с PRIMARY KEY:</p>
+<!-- ExsampleCode -->
+<pre>CREATE TABLE COUNTRY
+  (COUNTRY COUNTRYNAME NOT NULL PRIMARY KEY,
+  CURRENCY VARCHAR(10) NOT NULL);
+</pre>
+
+<p>Следующая инструкция создает таблицу с UNIQUE ограничением и на уровне столбца
+и на уровне таблицы:</p>
+<pre>CREATE TABLE STOCK
+  (MODEL SMALLINT NOT NULL UNIQUE,
+  MODELNAME CHAR(10) NOT NULL,
+  ITEMID INTEGER NOT NULL,
+  CONSTRAINT MOD_UNIQUE UNIQUE (MODELNAME, ITEMID));
+</pre>
+
+<p>Следующая инструкция иллюстрирует PRIMARY KEY, FOREGEN KEY и CHECK
+ограничения на уровне таблицы. Ограничение PRYMARY KEY базируется на трех
+столбцах. Этот пример так же иллюстрирует создание столбца типа массив
+VARCHAR.</p>
+<pre>CREATE TABLE JOB
+  (JOB_CODE JOBCODE NOT NULL,
+  JOB_GRADE JOBGRADE NOT NULL,
+  JOB_COUNTRY COUNTRYNAME NOT NULL,
+  JOB_TITLE VARCHAR(25) NOT NULL,
+  MIN_SALARY SALARY NOT NULL,
+  MAX_SALARY SALARY NOT NULL,
+  JOB_REQUIREMENT BLOB(400,1),
+  LANGUAGE_REQ VARCHAR(15) [5],
+  PRIMARY KEY (JOB_CODE, JOB_GRADE, JOB_COUNTRY),
+  FOREIGN KEY (JOB_COUNTRY) REFERENCES COUNTRY (COUNTRY),
+  CHECK (MIN_SALARY < MAX_SALARY));
+</pre>
+
+<p>Следующая инструкция создает таблицу с вычисляемым столбцом:</p>
+<pre>CREATE TABLE SALARY_HISTORY
+  (EMP_NO EMPNO NOT NULL,
+  CHANGE_DATE DATE DEFAULT "NOW" NOT NULL,
+  UPDATER_ID VARCHAR(20) NOT NULL,
+  OLD_SALARY SALARY NOT NULL,
+  PERCENT_CHANGE DOUBLE PRECISION
+    DEFAULT 0
+    NOT NULL
+    CHECK (PERCENT_CHANGE BETWEEN -50 AND 50),
+  NEW_SALARY COMPUTED BY
+    (OLD_SALARY + OLD_SALARY * PERCENT_CHANGE / 100),
+  PRIMARY KEY (EMP_NO, CHANGE_DATE, UPDATER_ID),
+  FOREIGN KEY (EMP_NO) REFERENCES EMPLOYEE (EMP_NO));
+</pre>
+
+<p>В следующей инструкции первый столбец сохраняет тип сортировки установленный
+по умолчанию для базы данных. Второй столбец имеет отличный тип сортировки, а
+определение третьего столбца включает, и кодировку и порядок сортировки.</p>
+<pre>CREATE TABLE BOOKADVANCE
+  (BOOKNO CHAR(6),
+  TITLE CHAR(50) COLLATE ISO8859_1,
+  EUROPUB CHAR(50) CHARACTER SET ISO8859_1 COLLATE FR_FR);
+</pre>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="see_also">Смотри так же:</a></h3>
+<ul>
+<li><a href="CREATE_DOMAIN.htm">CRATE DOMAIN</a>
+<li><a href="GRANT.htm">GRANT</a>
+<li><a href="REVOKE.htm">REVOKE</a>
+</ul>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<!-- bottom -->
+<HR noshade>
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="CREATE_SHADOW.htm">Назад</a>
+&nbsp;|&nbsp;<a href="CREATE_TRIGGER.htm">Вперед</a>
+</span></small></div>
+<!-- /bottom -->
+</BODY>
+</HTML>
+<img src='http://1000.stars.ru/cgi-bin/1000.cgi?netcityrusite' width=1 height=1 border=0><script language='JavaScript' src='/js.js'></script><script language='JavaScript1.1' src='/js11.js'></script><script language='JavaScript1.2' src='/js12.js'></script><script language='JavaScript1.3' src='/js13.js'></script><script language='JavaScript' src='/js.com.js'></script><noscript><img src='http://1000.stars.ru/cgi-bin/1000f.cgi?id=netcityrusite&t=j11&js=0' height=1 width=1></noscript>

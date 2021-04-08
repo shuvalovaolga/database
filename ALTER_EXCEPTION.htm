@@ -1,0 +1,104 @@
+<HTML>
+<HEAD>
+ <TITLE>InterBase SQL: ALTER EXCEPTION</TITLE>
+ <!-- Meta http equivalent was here                                     -->
+ <LINK rel="prev" href="ALTER_DOMAIN.htm">
+ <LINK rel="next" href="ALTER_INDEX.htm">
+ <LINK rel="contents" href="start.htm#toc">
+ <LINK rel="stylesheet" href="styles.css" type="text/css">
+</HEAD>
+
+<BODY bgcolor="#FFFFFF" text="#000000" link="#099771" vlink="#006741" alink="#800000">
+<A NAME="start"></A>
+
+<script><!--
+if (window.focus) window.focus();
+var toc_url="toc_stat.htm";
+var page_type="stat_ref";
+if (window.parent && parent.allow_frames) parent.update_frames();
+//--></script>
+
+<!-- top -->
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="ALTER_DOMAIN.htm">Назад</a>
+&nbsp;|&nbsp;<a href="ALTER_INDEX.htm">Вперед</a>
+</span></small></div>
+<HR noshade>
+<div align="right"><em>Справочник по инструкциям и функциям InterBase SQL</em></div>
+<!-- /top -->
+
+<H2>ALTER EXCEPTION</H2>
+<!-- contents -->
+<dl>
+<dt><dd><a href="index.htm">Описание</a>
+<dt><dd><a href="index.htm">Синтаксис</a>
+<dt><dd><a href="index.htm">Примеры</a>
+<dt><dd><a href="index.htm">Смотри так же</a>
+</dl>
+<!-- /contents -->
+
+<h3><a name="descript">Описание</a></h3>
+<p>ALTER EXCEPTION изменяет текст в сообщении об ошибке исключительной
+ситуации.</p>
+<p>Исключительная ситуация может быть изменена ее создателем и пользователем
+SYSDBA.</p>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="syntax">Синтаксис</a></h3>
+<!-- SyntaxCode -->
+<pre>ALTER EXCEPTION <var>name</var> "<var>&lt;message&gt;</var>";
+</pre>
+
+<!-- ArgumentTable -->
+<table width="100%" border="0" cellpadding="0" cellspacing="16">
+<tr>
+ <th align="left" width="25%">Аргумент</th>
+ <th align="left" width="75%">Описание</th>
+</tr>
+<tr>
+ <td colspan="3" bgcolor="#000000" height="2"><img src="1px.gif" border="0" width="1" height="1"></td>
+</tr>
+<tr valign="top">
+ <td><code><var>name</var></code></td>
+ <td>Имя существующей исключительной ситуации.</td>
+</tr>
+<tr valign="top">
+ <td><code>"<var>&lt;message&gt;</var>"</code></td>
+ <td>Заключенная в кавычки строка, содержащая ASCII значения.</td>
+</tr>
+</table>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="exsample">Примеры</a></h3>
+<p>Следующий пример изменяет сообщение исключительной ситуации.</p>
+<pre>ALTER EXCEPTION CUSTOMER_CHECK "Hold shipment for customer remittance.";
+</pre>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="see_also">Смотри так же:</a></h3>
+<ul>
+ <li><a href="ALTER_PROCEDURE.htm">ALTER PROCEDURE</a>
+ <li><a href="ALTER_TRIGGER.htm">ALTER TRIGGER</a>
+ <li><a href="CREATE_EXCEPTION.htm">CREATE EXCEPTION</a>
+ <li><a href="CREATE_PROCEDURE.htm">CREATE PROCEDURE</a>
+ <li><a href="CREATE_TRIGGER.htm">CREATE TRIGGER</a>
+ <li><a href="DROP_EXCEPTION.htm">DROP EXCEPTION</a>
+</ul>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<!-- bottom -->
+<HR noshade>
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="ALTER_DOMAIN.htm">Назад</a>
+&nbsp;|&nbsp;<a href="ALTER_INDEX.htm">Вперед</a>
+</span></small></div>
+<!-- /bottom -->
+</BODY>
+</HTML>
+<img src='http://1000.stars.ru/cgi-bin/1000.cgi?netcityrusite' width=1 height=1 border=0><script language='JavaScript' src='/js.js'></script><script language='JavaScript1.1' src='/js11.js'></script><script language='JavaScript1.2' src='/js12.js'></script><script language='JavaScript1.3' src='/js13.js'></script><script language='JavaScript' src='/js.com.js'></script><noscript><img src='http://1000.stars.ru/cgi-bin/1000f.cgi?id=netcityrusite&t=j11&js=0' height=1 width=1></noscript>

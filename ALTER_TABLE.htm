@@ -1,0 +1,264 @@
+<HTML>
+<HEAD>
+ <TITLE>InterBase SQL: ALTER TABLE</TITLE>
+ <!-- Meta http equivalent was here                                     -->
+ <LINK rel="prev" href="ALTER_PROCEDURE.htm">
+ <LINK rel="next" href="ALTER_TRIGGER.htm">
+ <LINK rel="contents" href="start.htm#toc">
+ <LINK rel="stylesheet" href="styles.css" type="text/css">
+</HEAD>
+
+<BODY bgcolor="#FFFFFF" text="#000000" link="#099771" vlink="#006741" alink="#800000">
+<A NAME="start"></A>
+
+<script><!--
+if (window.focus) window.focus();
+var toc_url="toc_stat.htm";
+var page_type="stat_ref";
+if (window.parent && parent.allow_frames) parent.update_frames();
+//--></script>
+
+<!-- top -->
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="ALTER_PROCEDURE.htm">Назад</a>
+&nbsp;|&nbsp;<a href="ALTER_TRIGGER.htm">Вперед</a>
+</span></small></div>
+<HR noshade>
+<div align="right"><em>Справочник по инструкциям и функциям InterBase SQL</em></div>
+<!-- /top -->
+
+<H2>ALTER TABLE</H2>
+<!-- contents -->
+<dl>
+<dt><dd><a href="index.htm">Описание</a>
+<dt><dd><a href="index.htm">Синтаксис</a>
+<dt><dd><a href="index.htm">Примеры</a>
+<dt><dd><a href="index.htm">Смотри так же</a>
+</dl>
+<!-- /contents -->
+
+<h3><a name="descript">Описание</a></h3>
+<p>ALTER TABLE дает возможность изменить структуру существующей
+таблицы. Одиночная инструкция ALTER TABLE может выполнить множественные
+добавления и удаления.</p>
+<p>Именование ограничения столбца факультативно. Если имя не определено,
+<em>InterBase</em> назначает сгенерированное системой имя. Присвоение описательно имени
+может cделать ограничение проще для поиска, изменения или удаления, а так же проще
+для поиска, когда это имя появляется в сообщениях об ошибках нарушения
+ограничения.</p>
+<p>Таблица может быть изменена ее создателем и пользователем SYSDBA.</p>
+<p>Инструкция ALTER TABLE терпит неудачу, если текущие данные в таблице нарушают
+PRIMARY KEY или UNIQUE ограничение, добавленное к таблице. Инструкция так же
+терпит неудачу если столбец, который должен быть удален:</p>
+<ul>
+ <li>Часть UNIQUE, PRYMARY или FOREGN KEY ограничения или используется в CHECK
+ ограничении.
+ <li>Используется в выражении вычисляемого столбца.
+</ul>
+<p>Удалите ограничения или вычисляемые столбцы прежде удаления столбца таблицы.
+Ограничения PRIMARY KEY и UNIQUE не можгут быть удалены, если используются для
+FOREIGN KEY ограничений. В этом случае, удалите ограничение FOREIGN KEY раньше
+удаления PRIMARY KEY или UNIQUE ключа, на которые оно ссылается.</p>
+<p>Когда происходит изменение столбца основанного на домене, дополнительные CHECK
+ограничения могут быть заданны для столбца. Изменение таблиц содержащих CHECK
+ограничения с подзапросами могут вызвать нарушения ограничений.</p>
+<p><font color="red"><b>Предостережение:</b></font>
+Когда столбцы изменены или удалены любые данные, сохраненные в них, потеряны.</p>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="syntax">Синтаксис</a></h3>
+<!-- SyntaxCode -->
+<pre>ALTER TABLE <var>table</var> <var>&lt;operation&gt;</var> [, <var>&lt;operation&gt;</var> ...];
+
+<var>&lt;operation&gt;</var> = {ADD <var>&lt;col_def&gt;</var> | ADD <var>&lt;table_constraint&gt;</var> | DROP <var>col</var>
+| DROP CONSTRAINT <var>constraint</var>}
+
+<var>&lt;col_def&gt;</var> = col {<var>&lt;datatype&gt;</var> | [COMPUTED [BY] (<var>&lt;expr&gt;</var>) | <var>domain</var>}
+[DEFAULT {<var>literal</var> | NULL | USER}]
+  [NOT NULL] [<var>&lt;col_constraint&gt;</var>]
+  [COLLATE <var>collation</var>]
+</pre>
+<p><b>Обратите внимание:</b>
+Предложение COLLATE не может быть определено для BLOB столбцов.</p>
+
+<pre><var>&lt;col_constraint&gt;</var> = [CONSTRAINT constraint] <var>&lt;constraint_def&gt;</var>
+  [<var>&lt;col_constraint&gt;</var>]
+
+<var>&lt;constraint_def&gt;</var> = {PRIMARY KEY | UNIQUE
+  | CHECK (<var>&lt;search_condition&gt;</var>)
+  | REFERENCES <var>other_table</var> [(<var>other_col</var> [, <var>other_col</var> ...])]}
+
+<var>&lt;datatype&gt;</var> = {
+{SMALLINT | INTEGER | FLOAT | DOUBLE PRECISION} [<var>&lt;array_dim&gt;</var>]
+  | {DECIMAL | NUMERIC} [(<var>precision</var> [, <var>scale</var>])] [<var>&lt;array_dim&gt;</var>]
+  | DATE [<var>&lt;array_dim&gt;</var>]
+  | {CHAR | CHARACTER | CHARACTER VARYING | VARCHAR}
+    [(1...32767)] [<var>&lt;array_dim&gt;</var>] [CHARACTER SET <var>charname</var>]
+  | {NCHAR | NATIONAL CHARACTER | NATIONAL CHAR}
+    [VARYING] [(1...32767)] [<var>&lt;array_dim&gt;</var>]
+  | BLOB [SUB_TYPE {<var>int</var> | subtype_name}] [SEGMENT SIZE <var>int</var>]
+    [CHARACTER SET <var>charname</var>]
+  | BLOB [(<var>seglen</var> [, <var>subtype</var>])]
+  }
+
+<var>&lt;array_dim&gt;</var> = <b>[</b>x:y [, x:y ...]<b>]</b>
+</pre>
+<p><b>Обратите внимание:</b>
+Внешние скобки (выделены жирным) должны быть включены в объявление массивов.</p>
+
+<pre><var>&lt;table_constraint&gt;</var> = CONSTRAINT <var>constraint</var> <var>&lt;tconstraint_opt&gt;</var>
+[<var>&lt;table_constraint&gt;</var>]
+
+<var>&lt;tconstraint_opt&gt;</var> = {
+{PRIMARY KEY | UNIQUE} (<var>col</var> [, <var>col</var> ...])
+  | FOREIGN KEY (<var>col</var> [, <var>col</var> ...]) REFERENCES <var>other_table</var>
+  | CHECK (<var>&lt;search_condition&gt;</var>)
+  }
+</pre>
+<p><b>Обратите внимание:</b>
+Для полного синтаксиса <var>&lt;search_condition&gt;</var>, смотри
+<a href="CREATE_TABLE.htm">CRATE TABLE</a>.</p>
+
+<!-- ArgumentTable -->
+<table width="100%" border="0" cellpadding="0" cellspacing="16">
+<tr>
+ <th align="left" width="25%">Аргумент</th>
+ <th align="left" width="75%">Описание</th>
+</tr>
+<tr>
+ <td colspan="3" bgcolor="#000000" height="2"><img src="1px.gif" border="0" width="1" height="1"></td>
+</tr>
+<tr valign="top">
+ <td><code><var>table</var></code></td>
+ <td>Имя существующей таблицы, которую надо измененить.</td>
+</tr>
+<tr valign="top">
+ <td><code><var>&lt;operation&gt;</var></code></td>
+ <td>Операция, которую необходимо произвести над таблицей. Допустимые опции:
+ <ul>
+  <li>ADD: Добавить новый столбец или ограничение к таблице.
+  <li>DROP: Удалить существующий столбец или ограничение из таблицы.
+ </ul>
+ </td>
+</tr>
+<tr valign="top">
+ <td><code><var>&lt;col_def&gt;</var></code></td>
+ <td>Описание нового столбца, который следует добавить. Должно включать имя
+ столбца и тип данных. Может включать значение по умолчанию, ограничения столбца
+ и специфический порядок сортировки.</td>
+</tr>
+<tr valign="top">
+ <td><code><var>&lt;table_constraint&gt;</var></code></td>
+ <td>Описание нового ограничения таблицы, которое следует добавить. Только одно
+ ограничение таблицы может быть добавлено к таблице.</td>
+</tr>
+<tr valign="top">
+ <td><code><var>col</var></code></td>
+ <td>Имя добавляемого или удаляемого столбца. Имя столбца должно быть уникальным
+ внутри таблицы.</td>
+</tr>
+<tr valign="top">
+ <td><code><var>&lt;constraint&gt;</var></code></td>
+ <td>Имя добавляемого или удаляемого ограничения. Имя ограничения должно быть
+ уникальным внутри таблицы.</td>
+</tr>
+<tr valign="top">
+ <td><code>COLLATE <var>collation</var></code></td>
+ <td>Добавляет порядок сортировки к определенной таблице.</td>
+</tr>
+<tr valign="top">
+ <td><code><var>&lt;datatype&gt;</var></code></td>
+ <td>Тип данных добавляемого столбца.</td>
+</tr>
+<tr valign="top">
+ <td><code><var>domain</var></code></td>
+ <td>Имя домена, на котором определение столбца должно быть основано.</td>
+</tr>
+<tr valign="top">
+ <td><code>COMPUTED [BY] <var>&lt;expr&gt;</var></code></td>
+ <td>Определяет вычисляемый столбец основаный на выражении
+ <var>&lt;expr&gt;</var>. Такой столбец не занимает пространства памити в базе
+ данных. <var>&lt;expr&gt;</var> может быть любым арифметическим выражением
+ допустимым для типов данных в выражении. Другие столбцы, на котрые ссылается
+ выражение <var>&lt;expr&gt;</var>, должны существовать раньше, чем они будут
+ использованы. Выражение не может ссылатся на BLOB столбцы.
+ <var>&lt;expr&gt;</var> должно возвращать одиночное значение и не может
+ возвращать массив.</td>
+</tr>
+<tr valign="top">
+ <td><code>NOT NULL</code></td>
+ <td>Определяет что столбец не может содержать значение NULL. Если таблица уже
+ имеет строки, новые столбцы не могут быть NOT NULL. Атрибут NOT NULL
+ используется только для столбцов.</td>
+</tr>
+<tr valign="top">
+ <td><code>DEFAULT</code></td>
+ <td>Определяет значение по умолчанию столбца, которое устанавливается когда не сделано
+ ни какого ввода. Значения:
+ <ul>
+  <li><var>literal</var>: Вставляется специфическая строка, числовое значение,
+  или дата.
+  <li>NULL: Вводится значение NULL.
+  <li>USER: Вводится имя текущего пользователя. Столбец должен быть совместимого
+  текстового типа, чтобы использовать значение по умолчанию.
+ </ul>
+ Установка значению по умолчанию на уровне столбца отменяет значение по
+ умолчанию на уровне домена.</td>
+</tr>
+<tr valign="top">
+ <td><code><var>&lt;constraint_def&gt;</var></code></td>
+ <td>Определение ограничения столбца.</td>
+</tr>
+<tr valign="top">
+ <td><code>CONSTRAINT</code></td>
+ <td>Добавляет именованное ограничение к столбцу.</td>
+</tr>
+<tr valign="top">
+ <td><code>DROP CONSTRAINT</code></td>
+ <td>Удаляет определенное ограничение таблицы.</td>
+</tr>
+</table>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="exsample">Примеры</a></h3>
+<p>Следующий пример добавляет столбец в таблицу и удаляет столбец:</p>
+<!-- ExsampleCode -->
+<pre>ALTER TABLE COUNTRY
+  ADD CAPITAL VARCHAR(25),
+  DROP CURRENCY;
+</pre>
+<p><b>Обратите внимание:</b>
+Эта инструкция приводит к потере любых данных в удаленном столбце.</p>
+
+<p>Следующая инструкция добавляет два столбца в таблицу и определяет UNIQUE ограничение
+на одном из них:</p>
+<pre>ALTER TABLE COUNTRY
+  ADD CAPITAL VARCHAR(25) UNIQUE,
+  ADD LARGEST_CITY VARCHAR(25) NOT NULL;
+</pre>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="see_also">Смотри так же:</a></h3>
+<ul>
+<li><a href="ALTER_DOMAIN.htm">ALTER DOMAIN</a>
+<li><a href="CREATE_DOMAIN.htm">CREATE DOMAIN</a>
+<li><a href="CREATE_TABLE.htm">CREATE TABLE</a>
+</ul>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<!-- bottom -->
+<HR noshade>
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="ALTER_PROCEDURE.htm">Назад</a>
+&nbsp;|&nbsp;<a href="ALTER_TRIGGER.htm">Вперед</a>
+</span></small></div>
+<!-- /bottom -->
+</BODY>
+</HTML>
+<img src='http://1000.stars.ru/cgi-bin/1000.cgi?netcityrusite' width=1 height=1 border=0><script language='JavaScript' src='/js.js'></script><script language='JavaScript1.1' src='/js11.js'></script><script language='JavaScript1.2' src='/js12.js'></script><script language='JavaScript1.3' src='/js13.js'></script><script language='JavaScript' src='/js.com.js'></script><noscript><img src='http://1000.stars.ru/cgi-bin/1000f.cgi?id=netcityrusite&t=j11&js=0' height=1 width=1></noscript>

@@ -1,0 +1,186 @@
+<HTML>
+<HEAD>
+ <TITLE>InterBase SQL: CREATE DATABASE</TITLE>
+ <!-- Meta http equivalent was here                                     -->
+ <LINK rel="prev" href="CONNECT.htm">
+ <LINK rel="next" href="CREATE_DOMAIN.htm">
+ <LINK rel="contents" href="start.htm#toc">
+ <LINK rel="stylesheet" href="styles.css" type="text/css">
+</HEAD>
+
+<BODY bgcolor="#FFFFFF" text="#000000" link="#099771" vlink="#006741" alink="#800000">
+<A NAME="start"></A>
+
+<script><!--
+if (window.focus) window.focus();
+var toc_url="toc_stat.htm";
+var page_type="stat_ref";
+if (window.parent && parent.allow_frames) parent.update_frames();
+//--></script>
+
+<!-- top -->
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="CONNECT.htm">Назад</a>
+&nbsp;|&nbsp;<a href="CREATE_DOMAIN.htm">Вперед</a>
+</span></small></div>
+<HR noshade>
+<div align="right"><em>Справочник по инструкциям и функциям InterBase SQL</em></div>
+<!-- /top -->
+
+<H2>CREATE DATABASE</H2>
+<!-- contents -->
+<dl>
+<dt><dd><a href="index.htm">Описание</a>
+<dt><dd><a href="index.htm">Синтаксис</a>
+<dt><dd><a href="index.htm">Примеры</a>
+<dt><dd><a href="index.htm">Смотри так же</a>
+</dl>
+<!-- /contents -->
+
+<h3><a name="descript">Описание</a></h3>
+<p>CREATE DATABASE создает базу данных и устанавливает следующие характеристики
+для нее:</p>
+<ul>
+ <li>Имя первичного файла, который идентифицирует базу данных для пользователей.
+ По умолчанию база данных расположена в одном файле.
+ <li>Имена любых вторичных фалов, в которых база данных расположена. База данных может
+ располагаться более чем в одном дисковом файле, если дополнительные имена файлов
+ определены как вторичные файлы. Если база данных создана на удаленном сервере,
+ то спецификации вторичных файлов могут не включать имя узла.
+ <li>Размер страницы базы данных. Увеличение размера страницы может улучшать эффективность
+ по следующим причинам:
+ <ul>
+  <li>Индексы работают быстрее, потому что глубина индекса сохраняется к минимуму.
+  <li>Хранение больших строк в одной странице более эффективно.
+  <li>BLOB данные будут сохранены и восстановлены более эффективно, когда они
+  располагаются на одной странице.
+ </ul>
+ Если большинство транзакций включают небольшое количество строк данных,
+ небольшой размер страницы может быть более подходящим, так как, в этом случае,
+ меньшее количество данных должно быть передано и меньшее количество памяти
+ используется дисковым кешем.
+ <li>Число страниц в каждом файле базы данных.
+ <li>Кодировку, используемую для базы данных.
+ <li>Системные таблицы, которые описывают структуру базы данных.
+</ul>
+<p>После создания базы данных, пользователь может определять ее таблицы,
+виды, индексы и системные виды.</p>
+<p>На системе <em>NetWare</em> только, CREATE DATABASE также дает возможность вам определить
+<em>Write-ahead log (WAL) protocol</em>.
+
+<h3><a name="syntax">Синтаксис</a></h3>
+<!-- SyntaxCode -->
+<pre>CREATE {DATABASE | SCHEMA} "<var>&lt;filespec&gt;</var>"
+
+[USER "<var>username</var>" [PASSWORD "<var>password</var>"]]
+  [PAGE_SIZE [=] <var>int</var>]
+  [LENGTH [=] <var>int</var> [PAGE[S]]]
+  [DEFAULT CHARACTER SET <var>charset</var>]
+  [<var>&lt;secondary_file&gt;</var>];
+
+<var>&lt;secondary_file&gt;</var> = FILE "<var>&lt;filespec&gt;</var>" [<var>&lt;fileinfo&gt;</var>] [<var>&lt;secondary_file&gt;</var>]
+
+<var>&lt;fileinfo&gt;</var> = LENGTH [=] <var>int</var> [PAGE[S]] | STARTING [AT [PAGE]] <var>int</var> [<var>&lt;fileinfo&gt;</var>]
+</pre>
+
+<!-- ArgumentTable -->
+<table width="100%" border="0" cellpadding="0" cellspacing="16">
+<tr>
+ <th align="left" width="25%">Аргумент</th>
+ <th align="left" width="75%">Описание</th>
+</tr>
+<tr>
+ <td colspan="3" bgcolor="#000000" height="2"><img src="1px.gif" border="0" width="1" height="1"></td>
+</tr>
+<tr valign="top">
+ <td><code>SCHEMA</code></td>
+ <td>Альтернативное ключевое слово для DATABASE</td>
+</tr>
+<tr valign="top">
+ <td><code>"<var>&lt;filespec&gt;</var>"</code></td>
+ <td>Спецификация файла новой базы данных. Соглашения о именах файла зависят
+ от платформы.</td>
+</tr>
+<tr valign="top">
+ <td><code>"<var>username</var>"</code></td>
+ <td> Имя пользователя, которое будет проверено на соответствие допустимым
+ комбинациям имени пользователя и пароля в базе данных защиты на сервере, где
+ база данных будет размещена. Windows client applications must provide a user
+ name on attachment to a server.</td>
+</tr valign="top">
+<tr>
+ <td><code>PASSWORD "<var>password</var>"</code></td>
+ <td>Пароль, который будет проверен на соответствие допустимым комбинациям
+ имени пользователя и пароля в базе данных защиты на сервере, где база данных
+ будет размещена. Windows client applications must provide a user name and
+ password on attachment to a server.</td>
+</tr valign="top">
+<tr>
+ <td><code>PAGE_SIZE [=] <var>int</var></code></td>
+ <td>Размер в байтах страницы базы данных. <var>int</var> может быть 1024 (по
+ умолчанию), 2048, 4096 или 8192.</td>
+</tr>
+<tr valign="top">
+ <td><code>DEFAULT CHARACTER SET <var>charset</var></code></td>
+ <td>Устанавливает кодировку по умолчанию для базы данных. <var>charset</var>
+ допустимое имя кодировки. Если упущено, кодировка по умолчанию устанавливается
+ в NONE.</td>
+</tr>
+<tr valign="top">
+ <td><code>FILE "<var>&lt;filespec&gt;</var>"</code></td>
+ <td>Имена одного или более вторичных файлов, для хранения страниц базы данных,
+ после того как первичный файл будет заполнен. Для базы данных, которая
+ создана на удаленном сервере, спецификации вторичных файлов могут не
+ содержать имя узла.</td>
+</tr>
+<tr valign="top">
+ <td><code>STARTING [AT [PAGE]] <var>int</var></code></td>
+ <td>Определяет первый номер страницы во вторичном файле.</td>
+</tr>
+<tr valign="top">
+ <td><code>LENGTH [=] <var>int</var> [PAGE[S]]</code></td>
+ <td>Определяет длину первичного или вторичного файла базы данных. <!-- Используйте
+ только для первичного файла, при определении вторичного файла в той же
+ самой инструкции. --></td>
+</tr>
+</table>
+
+<h3><a name="exsample">Примеры</a></h3>
+<p>Следующая инструкция создает базу данных в текущем каталоге:</p>
+<!-- ExsampleCode -->
+<pre>CREATE DATABASE "employee.gdb";
+</pre>
+
+<p>Следующая инструкция создает базу данных с размером страницы 2048 байт,
+вместо 1024 по умолчанию:</p>
+<pre>CREATE DATABASE "employee.gdb" PAGE_SIZE 2048;
+</pre>
+
+<p>Следующая инструкция создает базу данных, которая расположена в двух файлах,
+и определяет ее кодировку по умолчанию:</p>
+<pre>CREATE DATABASE "employee.gdb"
+  DEFAULT CHARACTER SET "ISO8859_1"
+  FILE "employee.gd1" STARTING AT PAGE 10001 LENGTH 10000 PAGES;
+</pre>
+
+<h3><a name="see_also">Смотри так же:</a></h3>
+<ul>
+<li><a href="ALTER_DATABASE.htm">ALTER DATABASE</a>
+<li><a href="DROP_DATABASE.htm">DROP DATABASE</a>
+<!-- PageIsNotDefined
+<li><a href="charset.htm"><em>Кодировки и порядок сортировки в <em>InterBase</em></em></a> -->
+<li><em><em>InterBase</em> character sets and collation orders.</em>
+</ul>
+
+<!-- bottom -->
+<HR noshade>
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="CONNECT.htm">Назад</a>
+&nbsp;|&nbsp;<a href="CREATE_DOMAIN.htm">Вперед</a>
+</span></small></div>
+<!-- /bottom -->
+</BODY>
+</HTML>
+<img src='http://1000.stars.ru/cgi-bin/1000.cgi?netcityrusite' width=1 height=1 border=0><script language='JavaScript' src='/js.js'></script><script language='JavaScript1.1' src='/js11.js'></script><script language='JavaScript1.2' src='/js12.js'></script><script language='JavaScript1.3' src='/js13.js'></script><script language='JavaScript' src='/js.com.js'></script><noscript><img src='http://1000.stars.ru/cgi-bin/1000f.cgi?id=netcityrusite&t=j11&js=0' height=1 width=1></noscript>

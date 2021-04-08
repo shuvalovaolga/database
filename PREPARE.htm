@@ -1,0 +1,144 @@
+<HTML>
+<HEAD>
+ <TITLE>InterBase SQL: PREPARE</TITLE>
+ <!-- Meta http equivalent was here                                     -->
+ <LINK rel="prev" href="OPEN_blob.htm">
+ <LINK rel="next" href="REVOKE.htm">
+ <LINK rel="contents" href="start.htm#toc">
+ <LINK rel="stylesheet" href="styles.css" type="text/css">
+</HEAD>
+
+<BODY bgcolor="#FFFFFF" text="#000000" link="#099771" vlink="#006741" alink="#800000">
+<A NAME="start"></A>
+
+<script><!--
+if (window.focus) window.focus();
+var toc_url="toc_stat.htm";
+var page_type="stat_ref";
+if (window.parent && parent.allow_frames) parent.update_frames();
+//--></script>
+
+<!-- top -->
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="OPEN_blob.htm">Назад</a>
+&nbsp;|&nbsp;<a href="REVOKE.htm">Вперед</a>
+</span></small></div>
+<HR noshade>
+<div align="right"><em>Справочник по инструкциям и функциям InterBase SQL</em></div>
+<!-- /top -->
+
+<H2>PREPARE</H2>
+<!-- contents -->
+<dl>
+<dt><dd><a href="index.htm">Описание</a>
+<dt><dd><a href="index.htm">Синтаксис</a>
+<dt><dd><a href="index.htm">Примеры</a>
+<dt><dd><a href="index.htm">Смотри так же</a>
+</dl>
+<!-- /contents -->
+
+<h3><a name="descript">Описание</a></h3>
+<p>PREPARE подготавливает инструкцю DSQL для повторного выполнения:</p>
+<ul>
+ <li>Проверяет инструкцию на синтаксические ошибки.
+ <li>Проверяет типы данных факультативных динамических параметров.
+ <li>Оптимизирует выполнение инструкции.
+ <li>Компелирует инструкцию для выполнения с помощью EXECUTE.
+</ul>
+<p>PREPARE это одна из группы инструкций, которые подготавливают инструкции DSQL
+для выполнения.</p>
+<table width="100%" border="0" cellpadding="0" cellspacing="16">
+<tr>
+ <th align="left" width="18%">Инструкция</th>
+ <th align="left" width="82%">Назначение</th>
+</tr>
+<tr>
+ <td colspan="2" bgcolor="#000000" height="2">
+ <img src="1px.gif" border="0" width="1" height="1"></td>
+</tr>
+<tr valign="top">
+ <td><code>PREPARE</code></td>
+ <td>Подготавливает инструкцию DSQL для выполнения.</td>
+</tr>
+<tr valign="top">
+ <td><code>DESCRIBLE</code></td>
+ <td>Заполняет XSQLDA информацией об инструкции.</td>
+</tr>
+<tr valign="top">
+ <td><code>EXECUTE</code></td>
+ <td>Выполняет предварительно подготовленную инструкцию.</td>
+</tr>
+<tr valign="top">
+ <td><code>EXECUTE IMMEDIATE</code></td>
+ <td>Подготавливает инструкцию DSQL, выполняет один раз, и сбрасывает ее.</td>
+</tr>
+</table>
+<p>После того, как инструкция подготовлена, она доступна для многократного
+выполнения, по мере необходимости в течении текущей сессии. Чтобы подготовить и
+выполнить инструкцию только однажды, используйте EXECUTE IMMEDIATE.</p>
+<p>Инструкция PREPARE устанавливает символьное имя для подготавливаемой
+инструкции DSQL. Она не декларирует переменную базового языка. За исключением
+программ на языке C, <strong>gpre</strong> не различает между верхним и нижним
+регистром в инструкции, "B" и "b" обрабатываются как один и тот же символ. Для C
+программ, используйте <strong>gpre</strong> -either_case ключ, чтобы
+активизировать чуствительность к регистру в течении предвварительной обработки
+(preprocessing).</p>
+<p>Если используется факультативное предложение INTO, PREPARE так же
+заполняет extended SQL descriptor area (XSQLDA) информацией о типе данных,
+длине и имени QWERTY...
+</p>
+<p><b>Обратите внимание:</b>
+</p>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="syntax">Синтаксис</a></h3>
+<pre><!-- SyntaxCode -->
+</pre>
+<p><b>Обратите внимание:</b>
+</p>
+
+<!-- ArgumentTable -->
+<table width="100%" border="0" cellpadding="0" cellspacing="16">
+<tr>
+ <th align="left" width="25%">Аргумент</th>
+ <th align="left" width="75%">Описание</th>
+</tr>
+<tr>
+ <td colspan="2" bgcolor="#000000" height="2">
+ <img src="1px.gif" border="0" width="1" height="1"></td>
+</tr>
+<tr valign="top">
+ <td><code></code></td>
+ <td></td>
+</tr>
+</table>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="exsample">Примеры</a></h3>
+<p></p>
+<pre><!-- ExsampleCode -->
+</pre>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="see_also">Смотри так же:</a></h3>
+<ul>
+ <li><a href="see_also.htm">See Also</a>
+</ul>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<!-- bottom -->
+<HR noshade>
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="OPEN_blob.htm">Назад</a>
+&nbsp;|&nbsp;<a href="REVOKE.htm">Вперед</a>
+</span></small></div>
+<!-- /bottom -->
+</BODY>
+</HTML>
+<img src='http://1000.stars.ru/cgi-bin/1000.cgi?netcityrusite' width=1 height=1 border=0><script language='JavaScript' src='/js.js'></script><script language='JavaScript1.1' src='/js11.js'></script><script language='JavaScript1.2' src='/js12.js'></script><script language='JavaScript1.3' src='/js13.js'></script><script language='JavaScript' src='/js.com.js'></script><noscript><img src='http://1000.stars.ru/cgi-bin/1000f.cgi?id=netcityrusite&t=j11&js=0' height=1 width=1></noscript>

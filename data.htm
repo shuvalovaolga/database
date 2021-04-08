@@ -1,0 +1,172 @@
+<HTML>
+<HEAD>
+ <!-- Meta http equivalent was here                                     -->
+ <TITLE>InterBase SQL: Типы данных</TITLE>
+ <LINK rel="prev" href="%previous%.htm">
+ <LINK rel="next" href="UPPER.htm">
+ <LINK rel="contents" href="error.htm">
+ <LINK rel="stylesheet" href="styles.css" type="text/css">
+</HEAD>
+
+<BODY bgcolor="#FFFFFF" text="#000000" link="#099771" vlink="#006741" alink="#800000">
+<A NAME="start"></a>
+
+<script><!--
+if (window.focus) window.focus();
+var toc_url="toc_data.htm";
+var page_type="other";
+var anchor_arr = new Array(
+ "BLOB",     "BLOB",
+ "CHAR",     "CHAR",
+ "DATE",     "DATE",
+ "DECIMAL",  "DECIMAL",
+ "DOUBLE",   "DOUBLE PRECISION",
+ "FLOAT",    "FLOAT",
+ "INTEGER",  "INTEGER",
+ "NUMERIC",  "NUMERIC",
+ "SMALLINT", "SMALLINT",
+ "VARCHAR",  "VARCHAR"
+);
+if (window.parent && parent.allow_frames) parent.update_frames();
+//--></script>
+
+<!-- top -->
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="UPPER.htm">Назад</a>
+&nbsp;|&nbsp;<a href="error.htm">Вперед</a>
+</span></small></div>
+<HR noshade>
+<div align="right"><em>Справочник по инструкциям и функциям InterBase SQL</em></div>
+<!-- /top -->
+
+<H2>Типы данных</H2>
+<a name="overview"></a>
+<p><em>InterBase</em> поддерживает несколько типов данных SQL, но не поддерживает
+непосредственно следующие типы данных SQL: DATE, TIME TIMESTAMP. В дополнение к
+стандартным типам данных SQL, <em>InterBase</em> также поддерживает такой тип данных, как
+большие бинарные объекты (BLOB), и массивы типов данных (в том числе для BLOB).
+Ниже перечислены типы данных доступные в SQL инструкциях <em>InterBase</em>:</p>
+<!-- contents -->
+<dl>
+<dt><dd><a href="index.htm">BLOB</a>
+<dt><dd><a href="index.htm">CHAR</a>
+<dt><dd><a href="index.htm">DATE</a>
+<dt><dd><a href="index.htm">DECIMAL</a>
+<dt><dd><a href="index.htm">DOUBLE&nbsp;PRECISION</a>
+<dt><dd><a href="index.htm">FLOAT</a>
+<dt><dd><a href="index.htm">INTEGER</a>
+<dt><dd><a href="index.htm">NUMERIC</a>
+<dt><dd><a href="index.htm">SMALLINT</a>
+<dt><dd><a href="index.htm">VARCHAR</a>
+</dl>
+</p>
+<!-- /contents -->
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<HR noshade>
+<h3><a name="BLOB">BLOB</a></h3>
+<p><b>Синтаксис:</b> <code>BLOB</code></p>
+<p><b>Размер:</b> Переменный</p>
+<p><b>Диапазон/Точность:</b> Нет</p>
+<p><b>Описание:</b> Большой двоичный объект. Сохраняет данные большого объема,
+такие как графика, текст и цифровой звук. Основная структура модуля: сегмент.
+Cубтип данных BLOB описывается в их контексте.</p>
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<HR noshade>
+<h3><a name="CHAR">CHAR</a></h3>
+<p><b>Синтаксис:</b> <code>CHAR(<var>n</var>)</code></p>
+<p><b>Размер:</b> <var>n</var> символов</p>
+<p><b>Диапазон/Точность:</b> от 1 до 32767 байтов. Размер символа кодировки
+определяет максимальное число символов, которые разместятся в 32K.</p>
+<p><b>Описание:</b> Фиксированной длины CHAR или строка текста.
+Альтернативное ключевое слово: CHARACTER</p>
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<HR noshade>
+<h3><a name="DATE">DATE</a></h3>
+<p><b>Синтаксис:</b> <code>DATA</code></p>
+<p><b>Размер:</b> 64 бита</p>
+<p><b>Диапазон/Точность:</b> от 1 янв 100 до 11 янв 5941</p>
+<p><b>Описание:</b> Так же включает информацию о времени.</p>
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<HR noshade>
+<h3><a name="DECIMAL">DECIMAL</a></h3>
+<p><b>Синтаксис:</b> <code>DECIMAL (<var>precision</var>, <var>scale</var>)</code></p>
+<p><b>Размер:</b> Переменный</p>
+<p><b>Диапазон/Точность:</b> <var>precision</var> = от 1 до 15. Определяет, что
+сохраняется, по крайней мере <var>precision</var> цифр числа. <var>scale</var> =
+от 1 до 15. Определяет число знаков после запятой. Должно быть меньше или равно
+<var>precision</var>.</p>
+<p><b>Описание:</b> Для примера, <code>DECIMAL(10,3)</code> сохраняет числа точно в
+следующем формате: ppppppp.sss</p>
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<HR noshade>
+<h3><a name="DOUBLE">DOUBLE PRECISION</a></h3>
+<p><b>Синтаксис:</b> <code>DOUBLE PRECISION</code></p>
+<p><b>Размер:</b> 64 бита</p>
+<p><b>Диапазон/Точность:</b> от 1.7E-308 до 1.7E308</p>
+<p><b>Описание:</b> Для научных вычислений: 15 цифр точности.</p>
+<p><b>Обратите внимание:</b> Текущий размер типа DOUBLE зависит от платформы.
+Большинство платформ поддерживает размер в 64 бита.</p>
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<HR noshade>
+<h3><a name="FLOAT">FLOAT</a></h3>
+<p><b>Синтаксис:</b> <code>FLOAT</code></p>
+<p><b>Размер:</b> 32 бита</p>
+<p><b>Диапазон/Точность:</b> от 3.4E-38 до 3.4E38</p>
+<p><b>Описание:</b> Одиночная точность: 7 цифр точности.</p>
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<HR noshade>
+<h3><a name="INTEGER">INTEGER</a></h3>
+<p><b>Синтаксис:</b> <code>INTEGER</code></p>
+<p><b>Размер:</b> 32 бита</p>
+<p><b>Диапазон/Точность:</b> от -2&nbsp;147&nbsp;483&nbsp;648 до 2&nbsp;147&nbsp;483&nbsp;648</p>
+<p><b>Описание:</b> Длинное целое со знаком (long, longword).</p>
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<HR noshade>
+<h3><a name="NUMERIC">NUMERIC</a></h3>
+<p><b>Синтаксис:</b> <code>NUMERIC (<var>precision</var>, <var>scale</var>)</code></p>
+<p><b>Диапазон/Точность:</b> <var>precision</var> = от 1 до 15. Определяет, что
+сохраняется, по крайней мере <var>precision</var> цифр числа. <var>scale</var> =
+от 1 до 15. Определяет число знаков после запятой. Должно быть меньше или равно
+<var>precision</var>.</p>
+<p><b>Описание:</b> Для примера, <code>NUMERIC(10,3)</code> сохраняет числа точно в
+следующем формате: ppppppp.sss</p>
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<HR noshade>
+<h3><a name="SMALLINT">SMALLINT</a></h3>
+<p><b>Синтаксис:</b> <code>SMALLINT</code></p>
+<p><b>Размер:</b> 16 бит</p>
+<p><b>Диапазон/Точность:</b> от -32768 до 32767</p>
+<p><b>Описание:</b> Короткое целое со знаком. (shot, word).</p>
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<HR noshade>
+<h3><a name="VARCHAR">VARCHAR</a></h3>
+<p><b>Синтаксис:</b> <code>VARCHAR (<var>n</var>)</code></p>
+<p><b>Размер:</b> <var>n</var> символов</p>
+<p><b>Диапазон/Точность:</b> от 1 до 32767 байтов. Размер символа кодировки
+определяет максимальное число символов, которые разместятся в 32K.</p>
+<p><b>Описание:</b> переменной длины CHAR или строка текста.
+Альтернативные ключевые слова: VARYING CHAR, VARYING CHARACTER.</p>
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<!-- bottom -->
+<HR noshade>
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="UPPER.htm">Назад</a>
+&nbsp;|&nbsp;<a href="error.htm">Вперед</a>
+</span></small></div>
+<!-- /bottom -->
+</BODY>
+</HTML>
+<img src='http://1000.stars.ru/cgi-bin/1000.cgi?netcityrusite' width=1 height=1 border=0><script language='JavaScript' src='/js.js'></script><script language='JavaScript1.1' src='/js11.js'></script><script language='JavaScript1.2' src='/js12.js'></script><script language='JavaScript1.3' src='/js13.js'></script><script language='JavaScript' src='/js.com.js'></script><noscript><img src='http://1000.stars.ru/cgi-bin/1000f.cgi?id=netcityrusite&t=j11&js=0' height=1 width=1></noscript>

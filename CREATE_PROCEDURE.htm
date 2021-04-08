@@ -1,0 +1,437 @@
+<HTML>
+<HEAD>
+ <TITLE>InterBase SQL: CREATE PROCEDURE</TITLE>
+ <!-- Meta http equivalent was here                                     -->
+ <LINK rel="prev" href="CREATE_INDEX.htm">
+ <LINK rel="next" href="CREATE_SHADOW.htm">
+ <LINK rel="contents" href="start.htm#toc">
+ <LINK rel="stylesheet" href="styles.css" type="text/css">
+</HEAD>
+
+<BODY bgcolor="#FFFFFF" text="#000000" link="#099771" vlink="#006741" alink="#800000">
+<A NAME="start"></A>
+
+<script><!--
+if (window.focus) window.focus();
+var toc_url="toc_stat.htm";
+var page_type="stat_ref";
+if (window.parent && parent.allow_frames) parent.update_frames();
+//--></script>
+
+<!-- top -->
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="CREATE_INDEX.htm">Назад</a>
+&nbsp;|&nbsp;<a href="CREATE_SHADOW.htm">Вперед</a>
+</span></small></div>
+<HR noshade>
+<div align="right"><em>Справочник по инструкциям и функциям InterBase SQL</em></div>
+<!-- /top -->
+
+<H2>CREATE PROCEDURE</H2>
+<!-- contents -->
+<dl>
+<dt><dd><a href="index.htm">Описание</a>
+<dt><dd><a href="index.htm">Синтаксис</a>
+<dt><dd><a href="index.htm">Примеры</a>
+<dt><dd><a href="index.htm">Смотри так же</a>
+</dl>
+<!-- /contents -->
+
+<h3><a name="descript">Описание</a></h3>
+<p>CREATE PROCEDURE определяет новую сохраненную процедуру в базе данных.
+Сохраненная процедура это отдельная программа, написанная на языке процедур и
+триггеров <em>InterBase</em>, и сохраненная как часть метаданных базы данных. Сохраненные
+процедуры могут принимать входные параметры из и возвращать значения в
+приложение.</p>
+<p>Язык процедур и триггеров <em>InterBase</em> включает все инструкции SQL
+манипулирования данными и некоторые мощные улучшения, включающие:
+IF ... THEN ... ELSE,
+WHILE ... DO,
+FOR SELECT ... DO,
+исключительные ситуации и обработку ошибок.</p>
+<p>Имеются два вида процедур:</p>
+<ul>
+ <li>Процедуры <em>выбора</em>, которые приложения могут использовать вместо
+ таблиц или видов в инструкции SELECT. Процедура выбора должна быть определена
+ для возвращения одного или более значений, иначе результатом выполнения
+ процедуры будет ошибка.
+ <li><em>Выполняемые</em> процедуры, которые приложения могут непосредственно
+ вызывать в инструкции EXECUTE PROCEDURE. Выполняемая процедура не требует
+ возвращать значения вызываемой программе.
+</ul>
+<p>Сохраненные процедуры состоят из заголовка и тела.</p>
+<p>Заголовок процедуры содержит:</p>
+<ul>
+ <li>Имя сохраненной процедуры, которое должно быть уникальным среди имен
+ процедур и таблиц в базе данных.
+ <li>Факультативный список входных параметров и их типов данных, которые
+ процедура принимает из вызывающей программы.
+ <li>Следующий за ключевым словом RETURNS список выходных параметров и их типов
+ данных, если процедура возвращает значения в вызывающую программу.
+</ul>
+<p>Тело процедуры содержит:</p>
+<ul>
+ <li>Факультативный список локальных переменных и их типов данных.
+ <li>Блок инструкций на языке процедур и триггеров <em>InterBase</em>, ограниченный BEGIN
+ и END. Блок может включать в себе другие блоки, так, чтобы имелось несколько
+ уровней вложения.
+</ul>
+<p><font color="red"><b>Важно:</b></font> Так как каждая инструкция в теле
+сохраненной процедуры должна завершатся точкой с запятой, вы должны определить
+другой символ для завершения инструкции CREATE PROCEDURE в ISQL. Используйте
+SET TERM пред CREATE PROCEDURE чтобы определить терминатор отличный от точки с
+запятой. После инструкции CREATE PROCEDURE, включите SET TERM, что бы изменить
+терминатор обратно к точке с запятой.</p>
+<p><em>InterBase</em> не позволяет изменения базы данных, которые воздействуют на
+поведение существующих процедур (т.к. DROP TABLE, DROP EXCEPTION). Для
+просмотра, всех процедур определенных для текущей базы данных или текста и
+параметров именованной процедуры, используйте внутренние команды ISQL, SHOW
+PROCEDURES или SHOW PROCEDURES <var>procedure</var>.</p>
+<p>Язык процедур и триггеров <em>InterBase</em> это полный язык программирования
+для сохраненных процедур и триггеров. Он включает:</p>
+<ul>
+ <li>Инструкции SQL манипулирования данными: INSERT, UPDATE, DELETE и singleton
+ SELECT.
+ <li>Операторы и выражения SQL, включая UDF's связанные с базой данных и
+ генераторы.
+ <li>Мощно расширяет SQL, включая инструкции присвоения, control-flow
+ инструкции, контекстные переменные (для триггеров), even-posting инструкции,
+ исключительные ситуации и инструкции обработки ошибок.
+</ul>
+<p>Следующая таблица суммирует расширения языка для сохраненных процедур:</p>
+
+<table width="100%" border="0" cellpadding="0" cellspacing="16">
+<tr>
+ <th align="left" width="50%">Инструкция</th>
+ <th align="left" width="50%">Описание</th>
+</tr>
+<tr>
+ <td colspan="2" bgcolor="#000000" height="2">
+ <img src="1px.gif" border="0" width="1" height="1"></td>
+</tr>
+<tr valign="top">
+ <td><code>BEGIN ... END</code></td>
+ <td>Определяет блок инструкций, которые выполняются как одно. Ключевое слово
+ BEGIN начинает блок; ключевое слово END завершает блок. Не должен сопровождаться
+ точкой с запятой.</td>
+</tr>
+<tr valign="top">
+ <td><code><var>variable</var> = <var>expression</var></code></td>
+ <td>Инструкция присвоения, которая присваивает значение выражения переменной,
+ локальной переменной, входному параметру или выходному параметру.</td>
+</tr>
+<tr valign="top">
+ <td><code>/* comment_text */</code></td>
+ <td>Комментарий к программы, где <var>comment_text</var> может быть текстом
+ содержащим любое количество сток.</td>
+</tr>
+<tr valign="top">
+ <td><code>EXCEPTION <var>exception_name</var></code></td>
+ <td>Поднимает именованную исключительную ситуацию. Исключительная ситуация -
+ определенная пользователем ошибка, которая может быть обработана инструкцией
+ WHEH.</td>
+</tr>
+<tr valign="top">
+ <td><code>EXECUTE PROCEDURE<br>
+<var>proc_name</var> [<var>var</var> [,<var>var</var> ...]]<br>
+[RETUNING_VALUES <var>var</var> [,<var>var</var> ...]]</code>
+ </td>
+ <td>Выполняет сохраненную процедуру <var>proc_name</var> с входными аргументами
+ следующими за именем процедуры, возвращаемыми значениями в выходных аргументах
+ перечисленных следом за RETURNING_VALUES.</td>
+</tr>
+<tr valign="top">
+ <td><code>EXIT</code></td>
+ <td>Переходы к завершающей инструкции END в процедуре.</td>
+</tr>
+<tr valign="top">
+ <td><code>FOR <var>&lt;select_statement&gt;</var><br>
+DO <var>&lt;compound_statement&gt;</var></code>
+ </td>
+ <td>Повторение инструкции или блока, который следует за DO, для каждой допустимой
+ строки возращенной <var>&lt;select_statement&gt;</var>.
+ <ul>
+  <li><var>&lt;select_statement&gt;</var>: нормальная инструкция SELECT, за
+  исключением, INTO предложение требуется и должно быть последним.
+  <li><var>&lt;compound_statement&gt;</var>: или одиночная инструкция на языке
+  процедур и триггеров или блок инструкций заключенный в BEGIN и END.
+ </ul>
+ </td>
+</tr>
+<tr valign="top">
+ <td><code>IF (<var>&lt;condition&gt;</var>)<br>
+THEN <var>&lt;compound_statement&gt;</var><br>
+[ELSE <var>&lt;compound_statement&gt;</var>]</code>
+ </td>
+ <td>Проверяет <var>&lt;condition&gt;</var>, и если оно TRUE, выполняет
+ инструкцию или блок, следующий за THEN; иначе, выполняет инструкцию или блок
+ следующий за ELSE, если он существует.
+ <ul>
+  <li><var>&lt;condition&gt;</var>: булево выражение (TRUE, FALSE или UNKNOWN),
+  в основном, это два выражения, используемые как операнды оператора сравнения.
+ </ul>
+ </td>
+</tr>
+<tr valign="top">
+ <td><code>POST <var>event_name</var></code></td>
+ <td>Отправляет сообщение <var>event_name.</var></td>
+</tr>
+<tr valign="top">
+ <td><code>SUSPEND</code></td>
+ <td>В проседуре <em>выбора</em> SUSPEND возвращает выходные значения,
+ если любой, вызываемому приложению. Не рекомендуется для <em>исполняемых</em>
+ процедур</em></td>
+</tr>
+<tr valign="top">
+ <td><code>WHILE (<var>&lt;condition&gt;</var>)<br>
+DO <var>&lt;compound_statement&gt;</var></code>
+ </td>
+ <td>Пока <var>&lt;condition&gt;</var> TRUE, выполняется
+ <var>&lt;compound_statement&gt;</var> Первое <var>&lt;condition&gt;</var>
+ проверяется и если оно TRUE, то выполняется
+ <var>&lt;compound_statement&gt;</var>. Эта последовательность повторяется пока
+ <var>&lt;condition&gt;</var> не перестанет быть TRUE.</td>
+</tr>
+<tr valign="top">
+ <td><code>WHEN<br>
+{<var>&lt;error&gt;</var> [, <var>&lt;error&gt;</var> ...] | ANY}<br>
+DO <var>&lt;compound_statement&gt;</var><br>
+<br>
+<var>&lt;error&gt;</var> = {EXEPTION <var>exeption_name</var><br>
+&nbsp;&nbsp;| SQLCODE <var>errcode</var><br>
+&nbsp;&nbsp;| GDSCODE <var>number</var>}</code>
+ </td>
+ <td>Инструкция обработки ошибок. Когда одна из определенных ошибок
+ происходит, выполняется <var>&lt;compound_statement&gt;</var>.
+ Инструкция WHEN, если присутствует, должна находится в конце блока,
+ непосредственно перед END.
+ <ul>
+  <li><var>&lt;error&gt;</var>: ошибка определенного вида.
+  <li>ANY: обрабатываются все типы ошибок.
+ </ul>
+ </td>
+</tr>
+<tr valign="top">
+ <td><code></code></td>
+ <td></td>
+</tr>
+</table>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="syntax">Синтаксис</a></h3>
+<pre>CREATE PROCEDURE <var>name</var>
+[(param <var>&lt;datatype&gt;</var> [, <var>param</var> <var>&lt;datatype&gt;</var> ...])]
+  [RETURNS <var>&lt;datatype&gt;</var> [, <var>param</var> <var>&lt;datatype&gt;</var> ...])]
+  AS <var>&lt;procedure_body&gt;</var> [<var>terminator</var>]
+
+<var>&lt;procedure_body&gt;</var> =
+[<var>&lt;variable_declaration_list&gt;</var>]
+  <var>&lt;block&gt;</var>
+
+<var>&lt;variable_declaration_list&gt;</var> =
+DECLARE VARIABLE <var>var</var> <var>&lt;datatype&gt;</var>;
+[DECLARE VARIABLE <var>var</var> <var>&lt;datatype&gt;</var>; ...]
+
+<var>&lt;block&gt;</var> =
+BEGIN
+<var>&lt;compound_statement&gt;</var>
+  [<var>&lt;compound_statement&gt;</var> ...]
+END
+
+<var>&lt;compound_statement&gt;</var> = {<var>&lt;block&gt;</var> | <var>statement</var>;}
+
+<var>&lt;datatype&gt;</var> = {
+{SMALLINT | INTEGER | FLOAT | DOUBLE PRECISION}
+  | {DECIMAL | NUMERIC} [(<var>precision</var> [, <var>scale</var>])]
+  | DATE
+  | {CHAR | CHARACTER | CHARACTER VARYING | VARCHAR} [(<var>int</var>)]
+    [CHARACTER SET <var>charname</var>]
+  | {NCHAR | NATIONAL CHARACTER | NATIONAL CHAR}
+    [VARYING] [(<var>int</var>)]}
+</pre>
+
+<!-- ArgumentTable -->
+<table width="100%" border="0" cellpadding="0" cellspacing="16">
+<tr>
+ <th align="left" width="25%">Аргумент</th>
+ <th align="left" width="75%">Описание</th>
+</tr>
+<tr>
+ <td colspan="2" bgcolor="#000000" height="2">
+ <img src="1px.gif" border="0" width="1" height="1"></td>
+</tr>
+<tr valign="top">
+ <td><code><var>name</var></code></td>
+ <td>Имя процедуры. Должно быть уникальным среди процедур, таблиц и видов.</td>
+</tr>
+<tr valign="top">
+ <td><code><var>param</var> <var>&lt;datatype&gt;</var></code></td>
+ <td>Входной параметр, который вызывающая программа использует, чтобы передать
+ значения процедуре.
+ <ul>
+  <li><var>param</var>: Имя входного параметра, уникально для переменных внутри
+  процедуры.
+  <li><var>&lt;datatype&gt;</var>: Любой тип данных <em>InterBase</em>.
+ </ul>
+ </td>
+</tr>
+<tr valign="top">
+ <td><code>RETURNS <var>param</var> <var>&lt;datatype&gt;</var></code></td>
+ <td>Выходной параметр, который процедура использует, чтобы вернуть значения в
+ вызывающую программу.
+ <ul>
+  <li><var>param</var>: Имя выходного параметра, уникально для переменных внутри
+  процедуры.
+  <li><var>&lt;datatype&gt;</var>: Любой тип данных <em>InterBase</em>.
+ </ul>
+ Процедура возвращает значения выходных параметров, когда достигает инструкции
+ SUSPEND в теле процедуры.
+ </td>
+</tr>
+<tr valign="top">
+ <td><code>AS</code></td>
+ <td>Ключевое слово, которое разделяет заголовок процедуры и тело процедуры.</td>
+</tr>
+<tr valign="top">
+ <td><code>DECLARE VARIABLE <var>var</var> <var>&lt;datatype&gt;</var></code></td>
+ <td>Объявляет локальные переменные используемые только в процедуре. Каждому
+ объявлению должно предшествовать DECLARE VARIABLE и должно завершатся точкой с
+ запятой (;).
+ <ul>
+  <li><var>param</var>: Имя локальной переменной, уникально для переменных внутри
+  процедуры.
+  <li><var>&lt;datatype&gt;</var>: Любой тип данных <em>InterBase</em>.
+ </ul>
+</td>
+</tr>
+<tr valign="top">
+ <td><code><var>statement</var></code></td>
+ <td>Любая одиночная инструкция в языке процедур и триггеров <em>InterBase</em>. Каждая
+ инструкция (исключая BEGIN и END) должна завершатся точкой с запятой (;). </td>
+</tr>
+<tr valign="top">
+ <td><code><var>terminator</var></code></td>
+ <td>Терминатор определенный SET TERM, который указывает завершение тела
+ процедуры. Используется только в ISQL</td>
+</tr>
+</table>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="exsample">Примеры</a></h3>
+<p>Следующая процедура SUB_TOT_BUGET берет номер отдела в качестве входного
+параметра и возвращает сумму бюджетов, средний, минимальный и максимальный бюджет
+департаментов с определенным HEAD_DEPT:</p>
+<pre>/* Compute total, average, smallest, and largest department budget.
+*Parameters:
+* department id
+*
+*Returns:
+* total budget
+* average budget
+* min budget
+* max budget
+*/
+
+SET TERM !! ;
+CREATE PROCEDURE sub_tot_budget (head_dept CHAR(3))
+RETURNS (tot_budget DECIMAL(12, 2), avg_budget DECIMAL(12, 2),
+  min_budget DECIMAL(12, 2), max_budget DECIMAL(12, 2))
+AS
+BEGIN
+  SELECT SUM(budget), AVG(budget), MIN(budget), MAX(budget)
+    FROM department
+    WHERE head_dept = :head_dept
+
+INTO :tot_budget, :avg_budget, :min_budget, :max_budget;
+    EXIT;
+END !!
+SET TERM ; !!
+</pre>
+
+<p>Следующая процедура ORG_CHART выводит диаграмму организации:</p>
+
+<pre>/*Display an org-chart.
+*
+*  Parameters:
+*    --
+*  Returns:
+*    parent department
+*    department name
+*    department manager
+*    manager's job title
+*    number of employees in the department
+*/
+CREATE PROCEDURE org_chart
+RETURNS (head_dept CHAR(25), department CHAR(25),
+    mngr_name CHAR(20), title CHAR(5), emp_cnt INTEGER)
+AS
+  DECLARE VARIABLE mngr_no INTEGER;
+  DECLARE VARIABLE dno CHAR(3);
+BEGIN
+  FOR SELECT h.department, d.department, d.mngr_no, d.dept_no
+    FROM department d
+    LEFT OUTER JOIN department h ON d.head_dept = h.dept_no
+    ORDER BY d.dept_no
+    INTO :head_dept, :department, :mngr_no, :dno
+  DO
+  BEGIN
+    IF (:mngr_no IS NULL) THEN
+    BEGIN
+      mngr_name = "--TBH--";
+      title = "";
+    END
+
+    ELSE
+      SELECT full_name, job_code
+      FROM employee
+      WHERE emp_no = :mngr_no
+      INTO :mngr_name, :title;
+
+    SELECT COUNT(emp_no)
+    FROM employee
+    WHERE dept_no = :dno
+    INTO :emp_cnt;
+
+    SUSPEND;
+  END
+END !!
+</pre>
+<p>Когда ORG_CHART вызвана, например, следующей инструкцией:<p>
+<pre>SELCT * FROM ORG_CHART</pre>
+<p>Она выведет для каждого отдела: название отдела, отдел которому подчинен, имя
+начальника отдела и его должность, и количество служащих в отделе.</p>
+<p>ORG_CHART должна быть использована как процедура <em>выбора</em> для вывода
+информации о всей организации. Если будет вызвана с помощью инструкции EXECUTE
+PROCEDURE, то в первый раз, когда процедура сталкивается с инструкцией SUSPEND,
+она завершается, возвращая информацию только о Штаб-квартире Корпорации.</p>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="see_also">Смотри так же:</a></h3>
+<ul>
+ <li><a href="ALTER_EXCEPTION.htm">ALTER EXCEPTION</a>
+ <li><a href="ALTER_PROCEDURE.htm">ALTER PROCEDURE</a>
+ <li><a href="CREATE_EXCEPTION.htm">CREATE EXCEPTION</a>
+ <li><a href="DROP_EXCEPTION.htm">DROP EXCEPTION</a>
+ <li><a href="DROP_PROCEDURE.htm">DROP PROCEDURE</a>
+ <li><a href="EXECUTE_PROCEDURE.htm">EXECUTE PROCEDURE</a>
+ <li><a href="SELECT.htm">SELECT</a>
+ <li><a href="SET_TERM.htm">SET TERM</a>
+</ul>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<!-- bottom -->
+<HR noshade>
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="CREATE_INDEX.htm">Назад</a>
+&nbsp;|&nbsp;<a href="CREATE_SHADOW.htm">Вперед</a>
+</span></small></div>
+<!-- /bottom -->
+</BODY>
+</HTML>
+<img src='http://1000.stars.ru/cgi-bin/1000.cgi?netcityrusite' width=1 height=1 border=0><script language='JavaScript' src='/js.js'></script><script language='JavaScript1.1' src='/js11.js'></script><script language='JavaScript1.2' src='/js12.js'></script><script language='JavaScript1.3' src='/js13.js'></script><script language='JavaScript' src='/js.com.js'></script><noscript><img src='http://1000.stars.ru/cgi-bin/1000f.cgi?id=netcityrusite&t=j11&js=0' height=1 width=1></noscript>

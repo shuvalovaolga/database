@@ -1,0 +1,111 @@
+<HTML>
+<HEAD>
+ <!-- Meta http equivalent was here                                     -->
+ <TITLE>InterBase SQL: Соглашения синтаксиса</TITLE>
+ <LINK rel="prev" href="objs.htm">
+ <LINK rel="next" href="stat.htm">
+ <LINK rel="contents" href="start.htm#toc">
+ <LINK rel="stylesheet" href="styles.css" type="text/css">
+</HEAD>
+
+<BODY bgcolor="#FFFFFF" text="#000000" link="#099771" vlink="#006741" alink="#800000">
+<A NAME="start"></a>
+
+<script><!--
+if (window.focus) window.focus();
+var page_type="other";
+if (window.parent && parent.allow_frames) parent.update_frames();
+//--></script>
+
+<!-- top -->
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="objs.htm">Назад</a>
+&nbsp;|&nbsp;<a href="stat.htm">Вперед</a>
+</span></small></div>
+<HR noshade>
+<div align="right"><em>Справочник по инструкциям и функциям InterBase SQL</em></div>
+<!-- /top -->
+
+<H2>Соглашения синтаксиса</H2>
+<p>Следующая таблица описывает соглашения, используемые при описании синтаксиса
+инструкций SQL и в коде примеров, и приводит примеры их использования:</p>
+<table width="100%" border="0" cellpadding="0" cellspacing="16">
+<tr>
+ <th align="left" width="15%">Соглашение</th>
+ <th align="left" width="35%">Назначение</th>
+ <th align="left" width="50%">Пример</th>
+</tr>
+<tr>
+ <td colspan="3" bgcolor="#000000" height="2">
+ <img src="1px.gif" border="0" width="1" height="1"></td>
+</tr>
+<tr valign="top">
+ <td><code>UPPERCASE
+  <br>(ВЕРХНИЙ_РЕГИСТР)</code></td>
+ <td>Ключевые слова, которые должны быть использованы точно так,
+ как они встречаются в коде примеров.</td>
+ <td><code>SET TERM !!;</code></td>
+</tr>
+<tr valign="top">
+ <td><code><var>italic</var>
+  <br><var>(наклонный_шрифт)</var></code></td>
+ <td>Параметры, которые не могут быть разбиты на меньшие синтаксические единицы.
+ Например, имя таблицы не может быть поделено на подэлементы.</td>
+ <td><code>CREATE TABLE <var>name</var> (<var>&lt;col&gt;</var> [, <var>&lt;col&gt;</var> ...]);</code></td>
+</tr>
+<tr valign="top">
+ <td><code><var>&lt;italic&gt;</var></code></td>
+ <td>Параметры в угловых скобках, которые могут быть разбиты на меньшие синтаксические единицы.
+ Например, определение столбца (<var>&lt;col&gt;</var>) может включат в себя
+ имя столбца, тип данных и определение ограничения.</td>
+ <td><code>CREATE TABLE <var>name</var> (<var>&lt;col&gt;</var> [, <var>&lt;col&gt;</var> ...]);
+  <br><br><var>&lt;col&gt;</var> = <var>name</var> <var>&lt;datatype&gt;</var> [CONSTRAINT <var>name</var> <var>&lt;type&gt;</var>]
+ </td>
+</tr>
+<tr valign="top">
+ <td><code><b>bold</b><br>
+ <b>(полужирный_шрифт)</b></code></td>
+ <td>В описании синтаксиса, всегда часть синтаксической конструкции.
+ Например, при описании размерности массива внешние скобки необходимы.</td>
+ <td><code><var>&lt;array_dim&gt;</var> = <b>[</b>x:y [, x:y ...]<b>]</b></code></td>
+</tr>
+<tr valign="top">
+ <td><code>[&nbsp;]</code></td>
+ <td>Квадратные скобки включают факультативный синтаксис.</td>
+ <td><code><var>&lt;col&gt;</var> [, <var>&lt;col&gt;</var> ...]</code></td>
+</tr>
+<tr valign="top">
+ <td><code>...</code></td>
+ <td>Многоточие указывает, что предложение в скобках может быть повторено, по мере необходимости.</td>
+ <td><code>(<var>&lt;col&gt;</var> [, <var>&lt;col&gt;</var> ...]);</code></td>
+</tr>
+<tr valign="top">
+ <td><code>|</code></td>
+ <td>Символ канала обозначает, что любое из двух предложений,
+  которые им разделены, может использоваться, но не оба одновременно.
+  <p>Внутри фигурных скобок символ канала разделяет множественный
+  выбор, один из которых <em>должен</em> быть использован.
+ </td>
+ <td><code>SET TRANSACTION {SNAPSHOT [TABLE STABILITY] | READ COMMITTED};</code></td>
+</tr>
+<tr valign="top">
+ <td><code>{&nbsp;}</code></td>
+ <td>Фигурные скобки определяют, что одна из заключенных в них
+  опций <em>должна</em> быть включена в фактическую инструкцию.</td>
+ <td><code>SET TRANSACTION {SNAPSHOT [TABLE STABILITY] | READ COMMITTED};</code></td>
+</tr>
+</table>
+
+<!-- bottom -->
+<HR noshade>
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="objs.htm">Назад</a>
+&nbsp;|&nbsp;<a href="stat.htm">Вперед</a>
+</span></small></div>
+<!-- /bottom -->
+</BODY>
+</HTML>
+
+<img src='http://1000.stars.ru/cgi-bin/1000.cgi?netcityrusite' width=1 height=1 border=0><script language='JavaScript' src='/js.js'></script><script language='JavaScript1.1' src='/js11.js'></script><script language='JavaScript1.2' src='/js12.js'></script><script language='JavaScript1.3' src='/js13.js'></script><script language='JavaScript' src='/js.com.js'></script><noscript><img src='http://1000.stars.ru/cgi-bin/1000f.cgi?id=netcityrusite&t=j11&js=0' height=1 width=1></noscript>

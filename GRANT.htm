@@ -1,0 +1,191 @@
+<HTML>
+<HEAD>
+ <TITLE>InterBase SQL: GRANT</TITLE>
+ <!-- Meta http equivalent was here                                     -->
+ <LINK rel="prev" href="FETCH_blob.htm">
+ <LINK rel="next" href="INSERT.htm">
+ <LINK rel="contents" href="start.htm#toc">
+ <LINK rel="stylesheet" href="styles.css" type="text/css">
+</HEAD>
+
+<BODY bgcolor="#FFFFFF" text="#000000" link="#099771" vlink="#006741" alink="#800000">
+<A NAME="start"></A>
+
+<script><!--
+if (window.focus) window.focus();
+var toc_url="toc_stat.htm";
+var page_type="stat_ref";
+if (window.parent && parent.allow_frames) parent.update_frames();
+//--></script>
+
+<!-- top -->
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="FETCH_blob.htm">Назад</a>
+&nbsp;|&nbsp;<a href="INSERT.htm">Вперед</a>
+</span></small></div>
+<HR noshade>
+<div align="right"><em>Справочник по инструкциям и функциям InterBase SQL</em></div>
+<!-- /top -->
+
+<H2>GRANT</H2>
+<!-- contents -->
+<dl>
+<dt><dd><a href="index.htm">Описание</a>
+<dt><dd><a href="index.htm">Синтаксис</a>
+<dt><dd><a href="index.htm">Примеры</a>
+<dt><dd><a href="index.htm">Смотри так же</a>
+</dl>
+<!-- /contents -->
+
+<h3><a name="descript">Описание</a></h3>
+<p>GRANT устанавливает привилегии на объекты базы данных, для пользователей или
+других объектов базы данных. Когда объект впервые создан, только его
+создатель имеет привилегии на него, и только создатель может предоставить (GRANT)
+привилегии на него другим пользователям или объектам.</p>
+<p>Для доступа к таблице или виду, пользователю или объекту требуются SELECT,
+INSERT, UPDATE или DELETE привилегии на эту таблицу или вид.</p>
+<p>Для вызова сохраненной процедуры из приложения, пользователю или объекту
+требуется EXECUTE привилегия на нее.</p>
+<p>Пользователи могут дать разрешение, предоставлять привилегии другим
+пользователям, обеспечивая <var>&lt;userlist&gt;</var>, который включает WITH
+GRANT OPTION. Пользователи могут предоставлять другим только те привилегии
+которые им, непосредственно, назначены.</p>
+<p>Привилегии могут быть назначены всем пользователям определив PUBLIC вместо
+списка имен пользователей. Определение PUBLIC предоставляет привилегии только
+пользователям, но не объектам базы данных.</p>
+<p>Следующая таблица суммирует доступные привилегии:</p>
+<!-- ArgumentTable -->
+<table width="100%" border="0" cellpadding="0" cellspacing="16">
+<tr>
+ <th align="left" width="16%">Привилегия</th>
+ <th align="left" width="84%">Позволяет пользователям...</th>
+</tr>
+<tr>
+ <td colspan="2" bgcolor="#000000" height="2">
+ <img src="1px.gif" border="0" width="1" height="1"></td>
+</tr>
+<tr valign="top">
+ <td><code>ALL</code></td>
+ <td>Выполнять SELECT, DELETE, INSERT, UPDATE и EXECUTE.</td>
+</tr>
+<tr valign="top">
+ <td><code>SELECT</code></td>
+ <td>Получать строки из таблицы или вида.</td>
+</tr>
+<tr valign="top">
+ <td><code>DELETE</code></td>
+ <td>Устранять строки из таблицы или вида.</td>
+</tr>
+<tr valign="top">
+ <td><code>INSERT</code></td>
+ <td>Сохранять новые строки в таблицу или вид.</td>
+</tr>
+<tr valign="top">
+ <td><code>UPDATE</code></td>
+ <td>Изменять текущие значения в одном или большем количестве столбцов в таблице
+ или виде. Может быть ограниченно определенным подмножеством столбцов.</td>
+</tr>
+<tr valign="top">
+ <td><code>EXECUTE</code></td>
+ <td>Выполнять сохраненные процедуры.</td>
+</tr>
+</table>
+<p>Привилегии могут быть удалены только пользователем, назначившим их, с помощью
+инструкции REVOKE. Если ALL привилегии назначены, тогда ALL привилегии должны
+быть отменены. Если привилегии предоставлены как PUBLIC, они могут быть удалены
+только для PUBLIC.</p>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="syntax">Синтаксис</a></h3>
+<pre>GRANT{
+{ALL [PRIVILEGES] | SELECT | DELETE | INSERT
+  | UPDATE [(<var>col</var> [, <var>col</var> ...])]}
+    ON [TABLE] {<var>tablename</var> | <var>viewname</var>}
+     TO {<var>&lt;object&gt;</var> | <var>&lt;userlist&gt;</var>}
+  | EXECUTE ON PROCEDURE <var>procname</var>
+    TO {<var>&lt;object&gt;</var> | <var>&lt;userlist&gt;</var>}
+  };
+
+<var>&lt;object&gt;</var> = PROCEDURE <var>procname</var> | TRIGGER <var>trigname</var> | VIEW <var>viewname</var>
+| [USER] <var>username</var> | PUBLIC [, <var>&lt;object&gt;</var>]
+
+<var>&lt;userlist&gt;</var> = [USER] <var>username</var> [, [USER] <var>username</var> ...]
+[WITH GRANT OPTION]
+</pre>
+
+<!-- ArgumentTable -->
+<table width="100%" border="0" cellpadding="0" cellspacing="16">
+<tr>
+ <th align="left" width="25%">Аргумент</th>
+ <th align="left" width="75%">Описание</th>
+</tr>
+<tr>
+ <td colspan="2" bgcolor="#000000" height="2">
+ <img src="1px.gif" border="0" width="1" height="1"></td>
+</tr>
+<tr valign="top">
+ <td><code><var>col</var></code></td>
+ <td>Столбцы, к которым предоставленные привилегии применяются.</td>
+</tr>
+<tr valign="top">
+ <td><code><var>tablename</var></code></td>
+ <td>Имя существующей таблицы, к которой предоставленные привилегии
+ применяются.</td>
+</tr>
+<tr valign="top">
+ <td><code><var>viewname</var></code></td>
+ <td>Имя существующего вида, к которому предоставленные привилегии
+ применяются.</td>
+</tr>
+<tr valign="top">
+ <td><code><var>&lt;object&gt;</var></code></td>
+ <td>Имя пользователя или существующего объекта базы данных, которым привилегии
+ будут предоставлены.</td>
+</tr>
+<tr valign="top">
+ <td><code><var>&lt;urerlist&gt;</var></code></td>
+ <td>Список пользователей, которым привилегии будут предоставлены.</td>
+</tr>
+<tr valign="top">
+ <td><code>WITH GRANT OPTION</code></td>
+ <td>Передает GRANT полномочие для привилегий, перечисленных в инструкции GRANT,
+ пользователям, перечисленным в <var>&lt;urerlist&gt;</var>.</td>
+</tr>
+</table>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="exsample">Примеры</a></h3>
+<p>Следующая инструкция предоставляет SELECT и DELETE привилегии пользователю.
+Опция WHITH GRANT OPTION дает пользователю GRANT полномочия:</p>
+<pre>GRANT SELECT, DELETE ON COUNTRY TO CHLOE WITH GRANT OPTION;
+</pre>
+
+<p>Следующая инструкция предоставляет EXECUTE привилегии на процедуру другим
+процедурам и пользователю:</p>
+<pre>GRANT EXECUTE ON PROCEDURE GET_EMP_PROJ
+  TO PROCEDURE ADD_EMP_PROJ, LUIS;
+</pre>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="see_also">Смотри так же:</a></h3>
+<ul>
+ <li><a href="REVOKE.htm">REVOKE</a>
+</ul>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<!-- bottom -->
+<HR noshade>
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="FETCH_blob.htm">Назад</a>
+&nbsp;|&nbsp;<a href="INSERT.htm">Вперед</a>
+</span></small></div>
+<!-- /bottom -->
+</BODY>
+</HTML>
+<img src='http://1000.stars.ru/cgi-bin/1000.cgi?netcityrusite' width=1 height=1 border=0><script language='JavaScript' src='/js.js'></script><script language='JavaScript1.1' src='/js11.js'></script><script language='JavaScript1.2' src='/js12.js'></script><script language='JavaScript1.3' src='/js13.js'></script><script language='JavaScript' src='/js.com.js'></script><noscript><img src='http://1000.stars.ru/cgi-bin/1000f.cgi?id=netcityrusite&t=j11&js=0' height=1 width=1></noscript>

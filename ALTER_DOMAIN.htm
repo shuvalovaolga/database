@@ -1,0 +1,154 @@
+<HTML>
+<HEAD>
+ <TITLE>InterBase SQL: ALTER DOMAIN</TITLE>
+ <!-- Meta http equivalent was here                                     -->
+ <LINK rel="prev" href="ALTER_DATABASE.htm">
+ <LINK rel="next" href="ALTER_EXCEPTION.htm">
+ <LINK rel="contents" href="start.htm#toc">
+ <LINK rel="stylesheet" href="styles.css" type="text/css">
+</HEAD>
+
+<BODY bgcolor="#FFFFFF" text="#000000" link="#099771" vlink="#006741" alink="#800000">
+<A NAME="start"></A>
+
+<script><!--
+if (window.focus) window.focus();
+var toc_url="toc_stat.htm";
+var page_type="stat_ref";
+if (window.parent && parent.allow_frames) parent.update_frames();
+//--></script>
+
+<!-- top -->
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="ALTER_DATABASE.htm">Назад</a>
+&nbsp;|&nbsp;<a href="ALTER_EXCEPTION.htm">Вперед</a>
+</span></small></div>
+<HR noshade>
+<div align="right"><em>Справочник по инструкциям и функциям InterBase SQL</em></div>
+<!-- /top -->
+
+<H2>ALTER DOMAIN</H2>
+<!-- contents -->
+<dl>
+<dt><dd><a href="index.htm">Описание</a>
+<dt><dd><a href="index.htm">Синтаксис</a>
+<dt><dd><a href="index.htm">Примеры</a>
+<dt><dd><a href="index.htm">Смотри так же</a>
+</dl>
+<!-- /contents -->
+
+<h3><a name="descript">Описание</a></h3>
+<p>ALTER DOMAIN изменяет любые свойства существующего домена, кроме типа данных
+и установки NOT NULL. Изменения, над доменом воздействуют на все столбцы,
+основанные на домене, которые не были отменены на уровне таблицы.</p>
+<p><b>Обратите внимание:</b> Для изменения типа данных или установки NOT NULL,
+удалите домен и создаете его заново с желаемыми свойствами.</p>
+<p>Домен может быть изменен его создателем или пользователем SYSDBA.</p>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="syntax">Синтаксис</a></h3>
+<!-- SyntaxCode -->
+<pre>ALTER DOMAIN <var>name</var> {
+[SET DEFAULT {<var>literal</var> | NULL | USER}]
+  | [DROP DEFAULT]
+  | [ADD [CONSTRAINT] CHECK (<var>&lt;dom_search_condition&gt;</var>)]
+  | [DROP CONSTRAINT]
+  };
+
+<var>&lt;dom_search_condition&gt;</var> = {
+VALUE <var>&lt;operator&gt;</var> <var>&lt;val&gt;</var>
+  | VALUE [NOT] BETWEEN <var>&lt;val&gt;</var> AND <var>&lt;val&gt;</var>
+  | VALUE [NOT] LIKE <var>&lt;val&gt;</var> [ESCAPE <var>&lt;val&gt;</var>]
+  | VALUE [NOT] IN (<var>&lt;val&gt;</var> [, <var>&lt;val&gt;</var> ...])
+  | VALUE IS [NOT] NULL
+  | VALUE [NOT] CONTAINING <var>&lt;val&gt;</var>
+  | VALUE [NOT] STARTING [WITH] <var>&lt;val&gt;</var>
+  | (<var>&lt;dom_search_condition&gt;</var>)
+  | NOT <var>&lt;dom_search_condition&gt;</var>
+  | <var>&lt;dom_search_condition&gt;</var> OR <var>&lt;dom_search_condition&gt;</var>
+  | <var>&lt;dom_search_condition&gt;</var> AND <var>&lt;dom_search_condition&gt;</var>
+  }
+
+<var>&lt;operator&gt;</var> = {= | &lt; | &gt; | &lt;= | &gt;= | !&lt; | !&gt; | &lt;&gt; | !=}
+</pre>
+
+<!-- ArgumentTable -->
+<table width="100%" border="0" cellpadding="0" cellspacing="16">
+<tr>
+ <th align="left" width="25%">Аргумент</th>
+ <th align="left" width="75%">Описание</th>
+</tr>
+<tr>
+ <td colspan="3" bgcolor="#000000" height="2"><img src="1px.gif" border="0" width="1" height="1"></td>
+</tr>
+<tr>
+ <td><var>name</var></td>
+ <td>Имя существующего домена.</td>
+</tr>
+<tr valign="top">
+ <td><code>SET DEFAULT</code></td>
+ <td>Определяет значение столбца по умолчанию, которое будет введено, когда
+ ни какой другой ввод не сделан. Значения:
+ <ul>
+  <li><var>literal</var>: Вводится определенная строка, числовое значение
+  или дата.
+  <li>NULL: Вводится значение NULL.
+  <li>USER: Вводится имя текущего пользователя. Столбец должен быть совместимого
+  текстового типа для использования значения по умолчанию.
+ </ul>
+ Установка значения по умолчанию на уровне столбца отменяет установку
+ значения по умолчанию на уровне домена.
+ </td>
+</tr>
+<tr valign="top">
+ <td><code>DROP DEFAULT</code></td>
+ <td>Удаляет существующее значение по умолчанию.</td>
+</tr>
+<tr valign="top">
+ <td><code>ADD [CONSTRAINT]<br> CHECK<br> (<var>&lt;dom_search_condition&gt;</var>)</code></td>
+ <td>Добавляет CHECK ограничения в определение домена. Определение домена может
+ включать только одно CHECK ограничение.</td>
+</tr>
+<tr valign="top">
+ <td><code>DROP CONSTRAINT</code></td>
+ <td>Удаляет CHECK ограничения из определения домена.</td>
+</tr>
+</table>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="exsample">Примеры</a></h3>
+<p>Следующая инструкция создает домен с допустимыми значениями &gt; 1000, за тем
+устанавливает его значение по умолчанию к 9999.</p>
+<!-- ExsampleCode -->
+<pre>CREATE DOMAIN CUSTNO
+  AS INTEGER
+    CHECK (VALUE > 1000);
+
+ALTER DOMAIN CUSTNO SET DEFAULT 9999;
+</pre>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="see_also">Смотри так же:</a></h3>
+<ul>
+<li><a href="CREATE_DOMAIN.htm">CREATE DOMAIN</a>
+<li><a href="CREATE_TABLE.htm">CREATE TABLE</a>
+<li><a href="DROP_DOMAIN.htm">DROP DOMAIN</a>
+</ul>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<!-- bottom -->
+<HR noshade>
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="ALTER_DATABASE.htm">Назад</a>
+&nbsp;|&nbsp;<a href="ALTER_EXCEPTION.htm">Вперед</a>
+</span></small></div>
+<!-- /bottom -->
+</BODY>
+</HTML>
+<img src='http://1000.stars.ru/cgi-bin/1000.cgi?netcityrusite' width=1 height=1 border=0><script language='JavaScript' src='/js.js'></script><script language='JavaScript1.1' src='/js11.js'></script><script language='JavaScript1.2' src='/js12.js'></script><script language='JavaScript1.3' src='/js13.js'></script><script language='JavaScript' src='/js.com.js'></script><noscript><img src='http://1000.stars.ru/cgi-bin/1000f.cgi?id=netcityrusite&t=j11&js=0' height=1 width=1></noscript>

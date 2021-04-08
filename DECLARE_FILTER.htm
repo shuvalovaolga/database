@@ -1,0 +1,129 @@
+<HTML>
+<HEAD>
+ <TITLE>InterBase SQL: DECLARE FILTER</TITLE>
+ <!-- Meta http equivalent was here                                     -->
+ <LINK rel="prev" href="DECLARE_CURSOR_blob.htm">
+ <LINK rel="next" href="DECLARE_TABLE.htm">
+ <LINK rel="contents" href="start.htm#toc">
+ <LINK rel="stylesheet" href="styles.css" type="text/css">
+</HEAD>
+
+<BODY bgcolor="#FFFFFF" text="#000000" link="#099771" vlink="#006741" alink="#800000">
+<A NAME="start"></A>
+
+<script><!--
+if (window.focus) window.focus();
+var toc_url="toc_stat.htm";
+var page_type="stat_ref";
+if (window.parent && parent.allow_frames) parent.update_frames();
+//--></script>
+
+<!-- top -->
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="DECLARE_CURSOR_blob.htm">Назад</a>
+&nbsp;|&nbsp;<a href="DECLARE_TABLE.htm">Вперед</a>
+</span></small></div>
+<HR noshade>
+<div align="right"><em>Справочник по инструкциям и функциям InterBase SQL</em></div>
+<!-- /top -->
+
+<H2>DECLARE FILTER</H2>
+<!-- contents -->
+<dl>
+<dt><dd><a href="index.htm">Описание</a>
+<dt><dd><a href="index.htm">Синтаксис</a>
+<dt><dd><a href="index.htm">Примеры</a>
+<dt><dd><a href="index.htm">Смотри так же</a>
+</dl>
+<!-- /contents -->
+
+<h3><a name="descript">Описание</a></h3>
+<p>DECLARE FILTER обеспечивает информацию относительно существующего BLOB
+фильтра, для база данных: где он расположен, имя и субтипы BLOB с которыми он
+работает. BLOB фильтр это написанная пользователем программа, которая
+преобразует данные, сохраненные в BLOB столбце, из одного субтипа в другой.</p>
+<p>INPUT_TYPE и OUTPUT_TYPE вместе определяют поведение BLOB фильтра. Каждый
+фильтр объявленный для базы данных должен иметь уникальную комбинацию
+INPUT_TYPE и OUTPUT_TYPE целочисленных значений. <em>InterBase</em> обеспечивает
+встроенный тип 1, для обработки текста. Типы определенные пользователем должны
+быть выражены, как отрицательные значения.</p>
+<p><var>"&lt;entryname&gt;"</var> - имя BLOB фильтра сохраненного в библиотеке.
+Когда приложение использует BLOB фильтр, оно вызывает функцию фильтра с этим именем.</p>
+<p><font color="red"><b>Важно:</b></font>
+Не используйте DECLARE FILTER, когда создаете базу данных на сервере <em>NetWare</em>.
+BLOB фильтр не может быть создан или использован на серверах <em>NetWare</em>.</p>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="syntax">Синтаксис</a></h3>
+<pre>DECLARE FILTER <var>filter</var>
+INPUT_TYPE <var>subtype</var> OUTPUT_TYPE <var>subtype</var>
+  ENTRY_POINT <var>"&lt;entryname&gt;"</var> MODULE_NAME <var>"&lt;modulename&gt;"</var>;
+</pre>
+
+<!-- ArgumentTable -->
+<table width="100%" border="0" cellpadding="0" cellspacing="16">
+<tr>
+ <th align="left" width="25%">Аргумент</th>
+ <th align="left" width="75%">Описание</th>
+</tr>
+<tr>
+ <td colspan="2" bgcolor="#000000" height="2">
+ <img src="1px.gif" border="0" width="1" height="1"></td>
+</tr>
+<tr valign="top">
+ <td><code><var>filter</var></code></td>
+ <td>Имя фильтра. Должно быть уникальным среди имен фильтров в базе данных.</td>
+</tr>
+<tr valign="top">
+ <td><code>INPUT_TYPE <var>subtype</var></code></td>
+ <td>Определяет исходный субтип BLOB для конвертации.</td>
+</tr>
+<tr valign="top">
+ <td><code>OUTPUT_TYPE <var>subtype</var></code></td>
+ <td>Определяет конечный субтип BLOB для конвертации.</td>
+</tr>
+<tr valign="top">
+ <td><code><var>"&lt;entryname&gt;"</var></code></td>
+ <td>Заключенная в кавычки строка определяющая имя функции BLOB фильтра,
+ сохраненной в связанной библиотеке.</td>
+</tr>
+<tr valign="top">
+ <td><code><var>"&lt;modulename&gt;"</var></code></td>
+ <td>Заключенная в кавычки спецификация файла идентифицирующая объектный модуль
+ в котором сохранен филтр.</td>
+</tr>
+</table>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="exsample">Примеры</a></h3>
+<p>Следующая инструкция  объявляет  BLOB фильтр:</p>
+<pre>DECLARE FILTER DESC_FILTER
+INPUT_TYPE 1
+OUTPUT_TYPE -4
+ENTRY_POINT "desc_filter"
+MODULE_NAME "FILTERLIB";
+</pre>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="see_also">Смотри так же:</a></h3>
+<ul>
+ <li><a href="DROP_FILTER.htm">DROP FILTER</a>
+</ul>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<!-- bottom -->
+<HR noshade>
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="DECLARE_CURSOR_blob.htm">Назад</a>
+&nbsp;|&nbsp;<a href="DECLARE_TABLE.htm">Вперед</a>
+</span></small></div>
+<!-- /bottom -->
+</BODY>
+</HTML>
+<img src='http://1000.stars.ru/cgi-bin/1000.cgi?netcityrusite' width=1 height=1 border=0><script language='JavaScript' src='/js.js'></script><script language='JavaScript1.1' src='/js11.js'></script><script language='JavaScript1.2' src='/js12.js'></script><script language='JavaScript1.3' src='/js13.js'></script><script language='JavaScript' src='/js.com.js'></script><noscript><img src='http://1000.stars.ru/cgi-bin/1000f.cgi?id=netcityrusite&t=j11&js=0' height=1 width=1></noscript>

@@ -1,0 +1,125 @@
+<HTML>
+<HEAD>
+ <TITLE>InterBase SQL: CONNECT</TITLE>
+ <!-- Meta http equivalent was here                                     -->
+ <LINK rel="prev" href="COMMIT.htm">
+ <LINK rel="next" href="CREATE_DATABASE.htm">
+ <LINK rel="contents" href="start.htm#toc">
+ <LINK rel="stylesheet" href="styles.css" type="text/css">
+</HEAD>
+
+<BODY bgcolor="#FFFFFF" text="#000000" link="#099771" vlink="#006741" alink="#800000">
+<A NAME="start"></A>
+
+<script><!--
+if (window.focus) window.focus();
+var toc_url="toc_stat.htm";
+var page_type="stat_ref";
+if (window.parent && parent.allow_frames) parent.update_frames();
+//--></script>
+
+<!-- top -->
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="COMMIT.htm">Назад</a>
+&nbsp;|&nbsp;<a href="CREATE_DATABASE.htm">Вперед</a>
+</span></small></div>
+<HR noshade>
+<div align="right"><em>Справочник по инструкциям и функциям InterBase SQL</em></div>
+<!-- /top -->
+
+<H2>CONNECT</H2>
+<!-- contents -->
+<dl>
+<dt><dd><a href="index.htm">Описание</a>
+<dt><dd><a href="index.htm">Синтаксис</a>
+<dt><dd><a href="index.htm">Примеры</a>
+<dt><dd><a href="index.htm">Смотри так же</a>
+</dl>
+<!-- /contents -->
+
+<h3><a name="descript">Описание</a></h3>
+<p>Инструкция CONNECT:</p>
+<ul>
+ <li>Инициализирует структуру данных базы данных.
+ <li>Определяет находится ли база данных на узле возникновения (<em>локальная
+ база данных</em>) или на другом узле (удаленная база данных). Базы данных
+ используемые для клиентов Windows 3.1 всегда на удаленном сервере. Происходит
+ сообщение об ошибках, если <em>InterBase</em> не может расположить базу данных.
+ <li>Факультативно, определяет имя пользователя и пароль для использования когда
+ присоединение к базе данных. Клиенты Windows 3.1 должны всегда отправлять
+ допустимое имя пользователя и пароль.
+ <li>Присоединяется к базе данных и проверяет страницу заголовка. Файл базы данных
+ должен содержать допустимую базу данных, а так же номер версии дисковой
+ структуру (ODS) базы данных должен быть распознан, установленной на сервере
+ версиией <em>InterBase</em>, иначе <em>InterBase</em> возвращает ошибку.
+</ul>
+<p>Когда CONNECT присоединяет к базе данных, используется кодировка по умолчанию
+(NONE), иначе определенная в предшествующей инструкции SET NAMES. Каждый раз
+когда используется CONNECT для присоединения к базе данных, предыдущая
+присоединения разрываются.</p>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="syntax">Синтаксис</a></h3>
+<pre>CONNECT ["]<var>&lt;filespec&gt;</var>["] [USER "<var>username</var>" [PASSWORD "<var>password</var>"]];
+</pre>
+<p><b>Обратите внимание:</b>
+</p>
+
+<!-- ArgumentTable -->
+<table width="100%" border="0" cellpadding="0" cellspacing="16">
+<tr>
+ <th align="left" width="25%">Аргумент</th>
+ <th align="left" width="75%">Описание</th>
+</tr>
+<tr>
+ <td colspan="2" bgcolor="#000000" height="2">
+ <img src="1px.gif" border="0" width="1" height="1"></td>
+</tr>
+<tr valign="top">
+ <td><code>"<var>&lt;filespec&gt;</var>"</code></td>
+ <td>Имя файла базы данных. Должно включать путь и узел.</td>
+</tr>
+<tr valign="top">
+ <td><code>USER "<var>username</var>"</code></td>
+ <td>Строка, которая определяет имяя пользователя для присоединения к базе
+ данных. Сервер проверяет имя пользователя в базе данных защиты
+ <em>isc.gdb</em>. Имя пользователя не чувствительно к регистру.</td>
+</tr>
+<tr valign="top">
+ <td><code>PASSWORD "<var>password</var>"</code></td>
+ <td>Строка, которая определяет пароль для присоединения к базе
+ данных. Сервер проверяет имя пользователя и пароль в базе данных защиты
+ <em>isc.gdb</em>. Чувствительно к регистру.</td>
+</tr>
+</table>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="exsample">Примеры</a></h3>
+<p>Следующая инструкция открывает базу данных для использования. Она использует
+все доступные опции CONNECT:</p>
+<pre>CONNECT "employee.gdb" USER "ACCT_REC" PASSWORD "peanuts";
+</pre>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="see_also">Смотри так же:</a></h3>
+<ul>
+ <li><a href="SET_NAMES.htm">SET NAMES</a>
+</ul>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<!-- bottom -->
+<HR noshade>
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="COMMIT.htm">Назад</a>
+&nbsp;|&nbsp;<a href="CREATE_DATABASE.htm">Вперед</a>
+</span></small></div>
+<!-- /bottom -->
+</BODY>
+</HTML>
+<img src='http://1000.stars.ru/cgi-bin/1000.cgi?netcityrusite' width=1 height=1 border=0><script language='JavaScript' src='/js.js'></script><script language='JavaScript1.1' src='/js11.js'></script><script language='JavaScript1.2' src='/js12.js'></script><script language='JavaScript1.3' src='/js13.js'></script><script language='JavaScript' src='/js.com.js'></script><noscript><img src='http://1000.stars.ru/cgi-bin/1000f.cgi?id=netcityrusite&t=j11&js=0' height=1 width=1></noscript>

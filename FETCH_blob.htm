@@ -1,0 +1,145 @@
+<HTML>
+<HEAD>
+ <TITLE>InterBase SQL: FETCH (BLOB)</TITLE>
+ <!-- Meta http equivalent was here                                     -->
+ <LINK rel="prev" href="FETCH.htm">
+ <LINK rel="next" href="GRANT.htm">
+ <LINK rel="contents" href="start.htm#toc">
+ <LINK rel="stylesheet" href="styles.css" type="text/css">
+</HEAD>
+
+<BODY bgcolor="#FFFFFF" text="#000000" link="#099771" vlink="#006741" alink="#800000">
+<A NAME="start"></A>
+
+<script><!--
+if (window.focus) window.focus();
+var toc_url="toc_stat.htm";
+var page_type="stat_ref";
+if (window.parent && parent.allow_frames) parent.update_frames();
+//--></script>
+
+<!-- top -->
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="FETCH.htm">Назад</a>
+&nbsp;|&nbsp;<a href="GRANT.htm">Вперед</a>
+</span></small></div>
+<HR noshade>
+<div align="right"><em>Справочник по инструкциям и функциям InterBase SQL</em></div>
+<!-- /top -->
+
+<H2>FETCH (BLOB)</H2>
+<!-- contents -->
+<dl>
+<dt><dd><a href="index.htm">Описание</a>
+<dt><dd><a href="index.htm">Синтаксис</a>
+<dt><dd><a href="index.htm">Примеры</a>
+<dt><dd><a href="index.htm">Смотри так же</a>
+</dl>
+<!-- /contents -->
+
+<h3><a name="descript">Описание</a></h3>
+<p>FETCH отыскивает следующий сегмент из BLOB и помещает его в определенный
+буфер.</p>
+<p>Переменная (host variable) <var>segment_length</var>, указывает число
+выбранных байтов. Это полезно, когда число возвращенных байтов меньше, чем
+переменная, для примера, при выборки последней части BLOB.</p>
+<p>FETCH может возвращать два значения переменной SQLCODE:</p>
+<ul>
+ <li>SQLCODE = 100 указывает, что не имеется больше сегментов BLOB, чтобы
+ отыскивать.
+ <li>SQLCODE = 101 указывает, что часть сегмента прочитана и помещена в
+ переменную локального буфера.
+</ul>
+<p><b>Обратите внимание:</b>
+Чтобы гарантировать, что переменная буфера достаточно большая, для хранения
+буфера сегмента BLOB в течении операций FRETCH, используйте опцию SEGMENT в
+инструкции BASED ON.</p>
+<p>Эта инструкция может быть использована в SQL.</p>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="syntax">Синтаксис</a></h3>
+<pre>FETCH <var>cursor</var> INTO
+[<var>:&lt;buffer&gt;</var> [[INDICATOR] <var>:segment_length</var>];
+</pre>
+
+<!-- ArgumentTable -->
+<table width="100%" border="0" cellpadding="0" cellspacing="16">
+<tr>
+ <th align="left" width="25%">Аргумент</th>
+ <th align="left" width="75%">Описание</th>
+</tr>
+<tr>
+ <td colspan="2" bgcolor="#000000" height="2">
+ <img src="1px.gif" border="0" width="1" height="1"></td>
+</tr>
+<tr valign="top">
+ <td><code><var>cursor</var></code></td>
+ <td>Имя открытого курсора BLOB из которого выбираются сегменты.</td>
+</tr>
+<tr valign="top">
+ <td><code><var>:&lt;buffer&gt;</var></code></td>
+ <td>Переменная базового языка для хранения сегментов выбираемых из BLOB
+ столбца. Пользователь должен объявить буфер прежде выборки сегментов в
+ него.</td>
+</tr>
+<tr valign="top">
+ <td><code>INDICATOR</code></td>
+ <td>Факультативное ключевое слово указывающее, что переменная базового языка
+ предназначена, для указания количества байт, которое будет возвращено
+ следующей инструкцией FETCH.</td>
+</tr>
+<tr valign="top">
+ <td><code><var>:segment_length</var></code></td>
+ <td>Переменная базового языка используется, чтобы указать число байт
+ возвращенных FETCH.</td>
+</tr>
+</table>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="exsample">Примеры</a></h3>
+<p>Следующий код из внедренного приложения SQL, выполняет BLOB FETCH:</p>
+<pre>while (SQLCODE != 100)
+{
+  EXEC SQL
+    OPEN BLOB_CUR USING :blob_id;
+  EXEC SQL
+    FETCH BLOB_CUR INTO :blob_segment :blob_seg_len;
+  while (SQLCODE !=100 || SQLCODE == 101)
+  {
+    blob_segment{blob_seg_len + 1] = '\0';
+    printf("%*.*s",blob_seg_len,blob_seg_len,blob_segment);
+      blob_segment{blob_seg_len + 1] = ' ';
+    EXEC SQL
+      FETCH BLOB_CUR INTO :blob_segment :blob_seg_len;
+  }
+  . . .
+}
+</pre>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="see_also">Смотри так же:</a></h3>
+<ul>
+ <li><a href="BASED_ON.htm">BASED ON</a>
+ <li><a href="CLOSE_blob.htm">CLOSE (BLOB)</a>
+ <li><a href="DECLARE_CURSOR_blob.htm">DECLARE CURSOR (BLOB)</a>
+ <li><a href="INSERT_CURSOR_blob.htm">INSERT CURSOR (BLOB)</a>
+ <li><a href="OPEN_blob.htm">OPEN (BLOB)</a>
+</ul>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<!-- bottom -->
+<HR noshade>
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="FETCH.htm">Назад</a>
+&nbsp;|&nbsp;<a href="GRANT.htm">Вперед</a>
+</span></small></div>
+<!-- /bottom -->
+</BODY>
+</HTML>
+<img src='http://1000.stars.ru/cgi-bin/1000.cgi?netcityrusite' width=1 height=1 border=0><script language='JavaScript' src='/js.js'></script><script language='JavaScript1.1' src='/js11.js'></script><script language='JavaScript1.2' src='/js12.js'></script><script language='JavaScript1.3' src='/js13.js'></script><script language='JavaScript' src='/js.com.js'></script><noscript><img src='http://1000.stars.ru/cgi-bin/1000f.cgi?id=netcityrusite&t=j11&js=0' height=1 width=1></noscript>

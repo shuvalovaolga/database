@@ -1,0 +1,175 @@
+<HTML>
+<HEAD>
+ <TITLE>InterBase SQL: DECLARE CURSOR</TITLE>
+ <!-- Meta http equivalent was here                                     -->
+ <LINK rel="prev" href="CREATE_VIEW.htm">
+ <LINK rel="next" href="DECLARE_CURSOR_blob.htm">
+ <LINK rel="contents" href="start.htm#toc">
+ <LINK rel="stylesheet" href="styles.css" type="text/css">
+</HEAD>
+
+<BODY bgcolor="#FFFFFF" text="#000000" link="#099771" vlink="#006741" alink="#800000">
+<A NAME="start"></A>
+
+<script><!--
+if (window.focus) window.focus();
+var toc_url="toc_stat.htm";
+var page_type="stat_ref";
+if (window.parent && parent.allow_frames) parent.update_frames();
+//--></script>
+
+<!-- top -->
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="CREATE_VIEW.htm">Назад</a>
+&nbsp;|&nbsp;<a href="DECLARE_CURSOR_blob.htm">Вперед</a>
+</span></small></div>
+<HR noshade>
+<div align="right"><em>Справочник по инструкциям и функциям InterBase SQL</em></div>
+<!-- /top -->
+
+<H2>DECLARE CURSOR</H2>
+<!-- contents -->
+<dl>
+<dt><dd><a href="index.htm">Описание</a>
+<dt><dd><a href="index.htm">Синтаксис</a>
+<dt><dd><a href="index.htm">Примеры</a>
+<dt><dd><a href="index.htm">Смотри так же</a>
+</dl>
+<!-- /contents -->
+
+<h3><a name="descript">Описание</a></h3>
+<p>DECLARE CURSOR определяет набор строк, которые могут быть возвращены, при
+обращении к этому курсору. Это первая инструкция, из группы инструкций работы с
+курсором, которая должна быть использована в работе с ним.</p>
+<p><var>&lt;select&gt;</var> определяет инструкцию SELECT, которая определяет, какие
+строки необходимо отыскать. Инструкция SELECT не должна включать предложения
+INTO и ORDER BY.</p>
+<p>Предложение FOR UPDATE OF необходимо, для модификации или удаления строк
+[using the WHERE CURRENT OF clause with UPDATE and DELETE.]</p>
+<p>Курсор это однонаправленный указатель на упорядоченный набор возвращенных
+строк выражением SELECT в инструкции DECLARE CURSOR. Он позволяет
+последовательный доступ к отысканным строкам в свою очередь. Есть четыре
+связанных инструкции для работы с курсором:</p>
+<table width="100%" border="0" cellpadding="0" cellspacing="16">
+<tr>
+ <th align="left" width="10%">Стадия</th>
+ <th align="left" width="25%">Инструкция</th>
+ <th align="left" width="65%">Назначение</th>
+</tr>
+<tr>
+ <td colspan="3" bgcolor="#000000" height="2">
+ <img src="1px.gif" border="0" width="1" height="1"></td>
+</tr>
+<tr valign="top">
+ <td>1</td>
+ <td><code>DECLARE CURSOR</code></td>
+ <td>Объявляет курсор. Инструкция SELECT определяет строки возвращаемые для
+ курсора.</td>
+</tr>
+<tr valign="top">
+ <td>2</td>
+ <td><code>OPEN</code></td>
+ <td>Отыскивает строки определенные, чтобы вернуть, с помощью DECLARE CURSOR.
+ Результирующие строки становятся текущим набором курсора.</td>
+</tr>
+<tr valign="top">
+ <td>3</td>
+ <td><code>FETCH</code></td>
+ <td>Возвращает текущую строку из текущего набора, начиная с первой
+ строки.</td>
+</tr>
+<tr valign="top">
+ <td>4</td>
+ <td><code>CLOSE</code></td>
+ <td>Закрывает курсор и освобождает системные ресурсы.</td>
+</tr>
+</table>
+<p>Эта инструкция может быть использована в SQL и DSQL.</p>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="syntax">Синтаксис</a></h3>
+<h4>SQL:</h4>
+<pre>DECLARE <var>cursor</var> CURSOR FOR <var>&lt;select&gt;</var> [FOR UPDATE OF <var>&lt;col&gt;</var> [, <var>&lt;col&gt;</var>...]];
+</pre>
+
+<h4>DSQL:</h4>
+<pre>DECLARE <var>cursor</var> CURSOR FOR <var>&lt;statement_id&gt;</var>
+</pre>
+
+<h4>Для BLOB:</h4>
+<p>Смотри: <a href="DECLARE_CURSOR_blob.htm">DECLARE CURSOR (BLOB)</a></p>
+
+<!-- ArgumentTable -->
+<table width="100%" border="0" cellpadding="0" cellspacing="16">
+<tr>
+ <th align="left" width="25%">Аргумент</th>
+ <th align="left" width="75%">Описание</th>
+</tr>
+<tr>
+ <td colspan="2" bgcolor="#000000" height="2">
+ <img src="1px.gif" border="0" width="1" height="1"></td>
+</tr>
+<tr valign="top">
+ <td><code><var>cursor</var></code></td>
+ <td>Имя курсора.</td>
+</tr>
+<tr valign="top">
+ <td><code><var>&lt;select&gt;</var></code></td>
+ <td>Определяет, какие строки должны быть возвращены. Только для SQL.</td>
+</tr>
+<tr valign="top">
+ <td><code>FOR UPDATE OF <var>&lt;col&gt;</var><br>[, <var>&lt;col&gt;</var>...]</code></td>
+ <td>Позволяет UPDATE и DELETE на определенных столбцах для возвращенных
+ строк.</td>
+</tr>
+<tr valign="top">
+ <td><code><var>&lt;statement_id&gt;<var></code></td>
+ <td>Имя инструкции SQL предварительно приготовленной (prepared) инструкции,
+ которая, в это м случае, должна использоваться вместо инструкции SELECT. Только
+ для DSQL.</td>
+</tr>
+</table>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="exsample">Примеры</a></h3>
+<p>Следующая внедренная инструкция SQL объявляет курсор с условиями поиска:</p>
+<pre>EXEC SQL
+  DECLARE C CURSOR FOR
+  SELECT CUST_NO, ORDER_STATUS
+  FROM SALES
+  WHERE ORDER_STATUS IN ("open", "shipping");
+</pre>
+
+<p>Следующая инструкция DSQL объявляет курсор для предварительно приготовленной
+инструкции QUERY1:</p>
+<pre>DECLARE Q CURSOR FOR QUERY1
+</pre>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="see_also">Смотри так же:</a></h3>
+<ul>
+ <li><a href="CLOSE.htm">CLOSE</a>
+ <li><a href="DECLARE_CURSOR_blob.htm">DECLARE CURSOR (BLOB)</a>
+ <li><a href="FETCH.htm">FETCH</a>
+ <li><a href="OPEN.htm">OPEN</a>
+ <li><a href="PREPARE.htm">PREPARE</a>
+ <li><a href="SELECT.htm">SELECT</a>
+</ul>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<!-- bottom -->
+<HR noshade>
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="CREATE_VIEW.htm">Назад</a>
+&nbsp;|&nbsp;<a href="DECLARE_CURSOR_blob.htm">Вперед</a>
+</span></small></div>
+<!-- /bottom -->
+</BODY>
+</HTML>
+<img src='http://1000.stars.ru/cgi-bin/1000.cgi?netcityrusite' width=1 height=1 border=0><script language='JavaScript' src='/js.js'></script><script language='JavaScript1.1' src='/js11.js'></script><script language='JavaScript1.2' src='/js12.js'></script><script language='JavaScript1.3' src='/js13.js'></script><script language='JavaScript' src='/js.com.js'></script><noscript><img src='http://1000.stars.ru/cgi-bin/1000f.cgi?id=netcityrusite&t=j11&js=0' height=1 width=1></noscript>

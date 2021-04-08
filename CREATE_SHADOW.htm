@@ -1,0 +1,185 @@
+<HTML>
+<HEAD>
+ <TITLE>InterBase SQL: CREATE SHADOW</TITLE>
+ <!-- Meta http equivalent was here                                     -->
+ <LINK rel="prev" href="CREATE_PROCEDURE.htm">
+ <LINK rel="next" href="CREATE_TABLE.htm">
+ <LINK rel="contents" href="start.htm#toc">
+ <LINK rel="stylesheet" href="styles.css" type="text/css">
+</HEAD>
+
+<BODY bgcolor="#FFFFFF" text="#000000" link="#099771" vlink="#006741" alink="#800000">
+<A NAME="start"></A>
+
+<script><!--
+if (window.focus) window.focus();
+var toc_url="toc_stat.htm";
+var page_type="stat_ref";
+if (window.parent && parent.allow_frames) parent.update_frames();
+//--></script>
+
+<!-- top -->
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="CREATE_PROCEDURE.htm">Назад</a>
+&nbsp;|&nbsp;<a href="CREATE_TABLE.htm">Вперед</a>
+</span></small></div>
+<HR noshade>
+<div align="right"><em>Справочник по инструкциям и функциям InterBase SQL</em></div>
+<!-- /top -->
+
+<H2>CREATE SHADOW</H2>
+<!-- contents -->
+<dl>
+<dt><dd><a href="index.htm">Описание</a>
+<dt><dd><a href="index.htm">Синтаксис</a>
+<dt><dd><a href="index.htm">Примеры</a>
+<dt><dd><a href="index.htm">Смотри так же</a>
+</dl>
+<!-- /contents -->
+
+<h3><a name="descript">Описание</a></h3>
+<p>CREATE SHADOW используется, чтобы принять меры против потери доступа к базе
+данных, создавая одну или большее количество копий базы данных на вторичных
+запоминающих устройствах. Каждая копия базы данных содержит один или более
+теневых файлов, упоминаемых как <em>теневой набор</em>. Каждый теневой набор
+обозначается уникальным положительным целым числом.</p>
+<p>Дисковое затенение имеет три компонента:</p>
+<ul>
+ <li>Базу данных для которой создается тень.
+ <li>Системную таблицу RDB$FILES, которая перечисляет теневые файлы и другую
+ информацию о базе данных.
+ <li>Теневой набор, содержащий один или более теневых файлов.
+</ul>
+<p>When CREATE SHADOW is issued, a shadow is established for the database most
+recently attached by an application. Теневой набор может содержать один или
+несколько файлов. В случае дискового сбоя, администратор базы данных
+активизирует тень диска так, она могла занять место базы данных. Если
+CONDITIONAL определено, тогда когда администратор базы данных активизирует тень
+диска, чтобы заменить текущую базу данных, новая тень будет создана для базы
+данных.</p>
+<p>Если база данных больше чем доступное пространство для тени на одном диске,
+используйте опцию <var>&lt;secondary_file&gt;</var>, чтобы определить несколько
+теневых файлов. Теневые файлы могут быть расположены на нескольких дисках.</p>
+<p><b>Совет:</b>
+Чтобы добавить вторичны файлы к существующей тени диска, удалите тень с помощью
+команды DROP SHADOW и используйте CREAT SHADOW, чтобы создать ее заново с
+желаемым количеством файлов.</p>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="syntax">Синтаксис</a></h3>
+<pre>CREATE SHADOW <var>set_num</var> [AUTO | MANUAL] [CONDITIONAL]
+"<var>&lt;filespec&gt;</var>" [LENGTH [=] <var>int</var> [PAGE[S]]]
+  [<var>&lt;secondary_file&gt;</var>];
+
+<var>&lt;secondary_file&gt;</var> = FILE "<var>&lt;filespec&gt;</var>" [<var>&lt;fileinfo&gt;</var>] [<var>&lt;secondary_file&gt;</var>]
+
+<var>&lt;fileinfo&gt;</var> = LENGTH [=] <var>int</var> [PAGE[S]] | STARTING [AT [PAGE]] <var>int</var> [<var>&lt;fileinfo&gt;</var>]
+</pre>
+
+<!-- ArgumentTable -->
+<table width="100%" border="0" cellpadding="0" cellspacing="16">
+<tr>
+ <th align="left" width="25%">Аргумент</th>
+ <th align="left" width="75%">Описание</th>
+</tr>
+<tr>
+ <td colspan="3" bgcolor="#000000" height="2"><img src="1px.gif" border="0" width="1" height="1"></td>
+</tr>
+<tr valign="top">
+ <td><code><var>set_num</var></code></td>
+ <td>Положительное целое число, которое обозначает теневой набор, которому
+ принадлежат последующие файлы перечисленные в инструкции.</td>
+</tr>
+<tr valign="top">
+ <td><code>AUTO</code></td>
+ <td>Определяет поведение доступа по умолчанию для базы данных в случае если
+ тень недоступна. Все присоединения и доступы преуспевают; ссылки к тени удалены
+ и теневые файлы отсоединены.</td>
+</tr>
+<tr valign="top">
+ <td><code>MANUAL</code></td>
+ <td>Определяет, что присоединения и доступы базы данных завершаются неудачей
+ пока тень не станет доступной или все ссылки к тени не будут удалены из базы
+ данных.</td>
+</tr>
+<tr valign="top">
+ <td><code>CONDITIONAL</code></td>
+ <td>Создает новую тень, allowing shadowing to continue, если первичная тень
+ становится недоступной или если тень заменяет базу данных из-за дискового
+ сбоя.</td>
+</tr>
+<tr valign="top">
+ <td><code>"<var>&lt;filespec&gt;</var>"</code></td>
+ <td>Явно указанный путь и имя файла для теневого файла. Спецификация файла тени
+ не должна содержать имя узла.</td>
+</tr>
+<tr valign="top">
+ <td><code>LENGTH [=] <var>int</var> [PAGE[S]]</code></td>
+ <td>Длинна дополнительного теневого файла в страницах базы данных. Размер
+ страницы определен размером страницы базы данных непосредственно.</td>
+</tr>
+<tr valign="top">
+ <td><code><var>&lt;secondary_file&gt;</var></code></td>
+ <td>Определяет длину первичного или вторичного теневого файла. Используйте
+ только для первичного файла если делаете определение вторичного файла в той же
+ самой инструкции</td>
+</tr>
+<tr valign="top">
+ <td><code>STARTING [AT [PAGE]] <var>int</var></code></td>
+ <td>Начальный номер страницы, с которого вторичный теневой файл начинается.</td>
+</tr>
+</table>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="exsample">Примеры</a></h3>
+<p>Следующая инструкция создает одиночный, automatic теневой файл для
+<em>employee.gdb</em>:</p>
+<pre>CREATE SHADOW 1 AUTO "employee.shd";
+</pre>
+
+<p>Следующая инструкция создает conditional, одиночный, automatic теневой файл для
+<em>employee.gdb</em>:</p>
+<pre>CREATE SHADOW 2 CONDITIONAL "employee.shd" LENGTH 1000;
+</pre>
+
+<p>Следующие инструкции создают множественные теневые наборы для базы данных
+<em>employee.gdb</em>. Первая инструкция определяет начальную страницу для
+теневых файлов; вторая инструкция определяет количество страниц для теневых
+файлов.</p>
+<pre>CREATE SHADOW 3 AUTO
+    "employee.sh1"
+  FILE "employee.sh2"
+    STARTING AT PAGE 1000
+  FILE "employee.sh3"
+    STARTING AT PAGE 2000;
+
+CREATE SHADOW 4 MANUAL "employee.sdw"
+  LENGTH 1000
+  FILE "employee.sh1"
+    LENGTH 1000
+  FILE "employee.sh2";
+</pre>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="see_also">Смотри так же:</a></h3>
+<ul>
+ <li><a href="DROP_SHADOW.htm">DROP SHADOW</a>
+</ul>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<!-- bottom -->
+<HR noshade>
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="CREATE_PROCEDURE.htm">Назад</a>
+&nbsp;|&nbsp;<a href="CREATE_TABLE.htm">Вперед</a>
+</span></small></div>
+<!-- /bottom -->
+</BODY>
+</HTML>
+<img src='http://1000.stars.ru/cgi-bin/1000.cgi?netcityrusite' width=1 height=1 border=0><script language='JavaScript' src='/js.js'></script><script language='JavaScript1.1' src='/js11.js'></script><script language='JavaScript1.2' src='/js12.js'></script><script language='JavaScript1.3' src='/js13.js'></script><script language='JavaScript' src='/js.com.js'></script><noscript><img src='http://1000.stars.ru/cgi-bin/1000f.cgi?id=netcityrusite&t=j11&js=0' height=1 width=1></noscript>

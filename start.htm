@@ -1,0 +1,210 @@
+<HTML>
+<HEAD>
+ <!-- Meta http equivalent was here                                     -->
+ <TITLE>Справочник по инструкциям и функциям InterBase SQL</TITLE>
+ <META HTTP-EQUIV="Author" CONTENT="Alexandr Panfilov (bb.free@home.ru)">
+ <META name="Content" content="Частичный перевод документации InterBase.
+   Документ содержить перевод книги 'SQL Statement And Function Reference',
+   дополненный главами из других разделов."
+ <META name="Keywords" content="SQL, InterBase, Server, Database, Query,
+   Language, Query Language, Statement, Function, Syntax, Specification,
+   Reference, Table, Table column, Table record, Stored procedure,
+   Data types, BLOB, Integrity constraints, Trigger, Generator, Security,
+   Transaction, Alexandr Panfilov, Сервер, База данных, Запрос, Язык запросов,
+   Инструкция,Функция, Синтаксис, Спецификация, Справочник, Таблица,
+   Таблица базы данных, Столбец, Запись, Процедура, Трансакция, Типы данных,
+   Ограничения целостности, Триггер, Генератор, Защита, Александр Панфилов">
+ <!-- <LINK rel="prev" href="%previous%.htm"> -->
+ <LINK rel="next" href="about.htm">
+ <LINK rel="contents" href="start.htm#toc">
+ <LINK rel="stylesheet" href="styles.css" type="text/css">
+</HEAD>
+
+<BODY bgcolor="#FFFFFF" text="#000000" link="#099771" vlink="#006741" alink="#800000">
+<A NAME="start"></a>
+
+<script><!--
+if (window.focus) window.focus();
+var no_to_start=true;
+if (window.parent && parent.allow_frames) parent.update_frames();
+//--></script>
+
+<!-- top -->
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;Назад<!-- <a href="%previous%.htm">Назад</a> -->
+&nbsp;|&nbsp;<a href="about.htm">Вперед</a>
+</span></small></div>
+<HR noshade>
+<div align="right"><em>Справочник по инструкциям и функциям InterBase SQL</em></div>
+<!-- /top -->
+
+<H1>Справочник по инструкциям и функциям InterBase&nbsp;SQL</H1>
+
+<H3>От переводчика</H3>
+<p>Данный документ является частичным переводом документации <em>InterBase</em>&nbsp;4.2.
+Документ содержить перевод книги <em>SQL Statement And Function Reference</em>,
+которая описывает синтаксис и использование каждой функции и инструкции <em>InterBase</em> SQL,
+дополненный главами из других разделов документации.
+</p>
+<p>Здесь вы можете взять <a href="http://chat.home.ru/homes/bb/files/sqlref.zip">оригинальный
+текст</a> <em>SQL Statement And Function Reference</em> в формате <em>win-help</em>.
+Я постарался по возможности сохранить исходную структуру документа, но вы заметете некоторые
+отличия, связанные в основном с переходом на <em>html</em> формат.</p>
+<p>Перевод может содержать некоторые ошибки, неточности и несоответствия с общепринятой
+терминологией. Я буду очень признателен, если вы мне укажете на это.</p>
+<p>В сети документ размещен по адресу:
+<!-- <a href="http://chat.home.ru/homes/bb/ib" target="_top">http://chat.home.ru/homes/bb/ib/sql</a></p> -->
+<a href="index.htm" target="_top">http://www.netcity.ru/~alexpanf/books/ibsql</a></p>
+<p>Последние изменения: 11.03.2000</p>
+<address>Alexandr Panfilov<br>
+<small>
+E-mail: <a href="mailto:bb.free@home.ru?subject=InterBase%20SQL%20Statement%20And%20Function%20Reference">bb.free@home.ru</a><br>
+<!-- E-mail: <a href="mailto:alexpanf@netcity.ru?subject=InterBase%20SQL%20Statement%20And%20Function%20Reference">alexpanf@netcity.ru</a><br> -->
+FIDO: 2:5030/646.4</small>
+</address>
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<!-- doc_contents -->
+<H2><a name="toc">Оглавление:</a></H2>
+<!-- About -->
+ <H3><a href="about.htm">Краткий обзор</a></H3>
+
+<!-- Objects -->
+ <H3><a href="objs.htm">Объекты и концепции базы данных</a></H3>
+ <dl>
+  <dt><dd><a href="objs.htm">Таблицы</a> (Tables)
+  <dt><dd><a href="objs.htm">Столбцы</a> (Columns)
+  <dt><dd><a href="objs.htm">Типы данных</a> (Data types)
+  <dt><dd><a href="objs.htm">Домены</a> (Domains)
+  <dt><dd><a href="objs.htm">Справочные ограничения целостности</a> (Referential integrity constraints)
+  <dt><dd><a href="objs.htm">Индексы</a> (Indexes)
+  <dt><dd><a href="objs.htm">Виды</a> (Views)
+  <dt><dd><a href="objs.htm">Сохраненные процедуры</a> (Stored procedures)
+  <dt><dd><a href="objs.htm">Триггеры</a> (Triggers)
+  <dt><dd><a href="objs.htm">Генераторы</a> (Generators)
+  <dt><dd><a href="objs.htm">Защита</a> (Security)
+ </dl>
+
+<!-- SyntaxConventions -->
+ <H3><a href="syconv.htm">Соглашения синтаксиса</a></H3>
+
+<!-- StatementList -->
+ <H3><a href="stat.htm">Список инструкций</a></H3>
+ <dl>
+  <dt><dd><a href="ALTER_DATABASE.htm">ALTER DATABASE</a>
+  <dt><dd><a href="ALTER_DOMAIN.htm">ALTER DOMAIN</a>
+  <dt><dd><a href="ALTER_EXCEPTION.htm">ALTER EXCEPTION</a>
+  <dt><dd><a href="ALTER_INDEX.htm">ALTER INDEX</a>
+  <dt><dd><a href="ALTER_PROCEDURE.htm">ALTER PROCEDURE</a>
+  <dt><dd><a href="ALTER_TABLE.htm">ALTER TABLE</a>
+  <dt><dd><a href="ALTER_TRIGGER.htm">ALTER TRIGGER</a>
+  <dt><dd><a href="BASED_ON.htm">BASED ON</a>
+  <dt><dd><a href="BEGIN_DECLARE_SECTION.htm">BEGIN DECLARE SECTION</a>
+  <dt><dd><a href="CLOSE.htm">CLOSE</a>
+  <dt><dd><a href="CLOSE_blob.htm">CLOSE (BLOB)</a>
+  <dt><dd><a href="COMMIT.htm">COMMIT</a>
+  <dt><dd><a href="CONNECT.htm">CONNECT</a>
+  <dt><dd><a href="CREATE_DATABASE.htm">CREATE DATABASE</a>
+  <dt><dd><a href="CREATE_DOMAIN.htm">CREATE DOMAIN</a>
+  <dt><dd><a href="CREATE_EXCEPTION.htm">CREATE EXCEPTION</a>
+  <dt><dd><a href="CREATE_GENERATOR.htm">CREATE GENERATOR</a>
+  <dt><dd><a href="CREATE_INDEX.htm">CREATE INDEX</a>
+  <dt><dd><a href="CREATE_PROCEDURE.htm">CREATE PROCEDURE</a>
+  <dt><dd><a href="CREATE_SHADOW.htm">CREATE SHADOW</a>
+  <dt><dd><a href="CREATE_TABLE.htm">CREATE TABLE</a>
+  <dt><dd><a href="CREATE_TRIGGER.htm">CREATE TRIGGER</a>
+  <dt><dd><a href="CREATE_VIEW.htm">CREATE VIEW</a>
+  <dt><dd><a href="DECLARE_CURSOR.htm">DECLARE CURSOR</a>
+  <dt><dd><a href="DECLARE_CURSOR_blob.htm">DECLARE CURSOR (BLOB)</a>
+  <dt><dd>DECLARE EXTERNAL FUNCTION<!--<a href="DECLARE_EXTERNAL_FUNCTION.htm">DECLARE EXTERNAL FUNCTION</a>-->
+  <dt><dd><a href="DECLARE_FILTER.htm">DECLARE FILTER</a>
+  <dt><dd>DECLARE STATEMENT<!-- <a href="DECLARE_STATEMENT.htm">DECLARE STATEMENT</a> -->
+  <dt><dd><a href="DECLARE_TABLE.htm">DECLARE TABLE</a>
+  <dt><dd><a href="DELETE.htm">DELETE</a>
+  <dt><dd>DESCRIBE<!-- <a href="DESCRIBE.htm">DESCRIBE</a> -->
+  <dt><dd><a href="DISCONNECT.htm">DISCONNECT</a>
+  <dt><dd><a href="DROP_DATABASE.htm">DROP DATABASE</a>
+  <dt><dd><a href="DROP_DOMAIN.htm">DROP DOMAIN</a>
+  <dt><dd><a href="DROP_EXCEPTION.htm">DROP EXCEPTION</a>
+  <dt><dd>DROP EXTERNAL FUNCTION<!-- <a href="DROP_EXTERNAL_FUNCTION.htm">DROP EXTERNAL FUNCTION</a> -->
+  <dt><dd><a href="DROP_FILTER.htm">DROP FILTER</a>
+  <dt><dd><a href="DROP_INDEX.htm">DROP INDEX</a>
+  <dt><dd><a href="DROP_PROCEDURE.htm">DROP PROCEDURE</a>
+  <dt><dd><a href="DROP_SHADOW.htm">DROP SHADOW</a>
+  <dt><dd><a href="DROP_TABLE.htm">DROP TABLE</a>
+  <dt><dd><a href="DROP_TRIGGER.htm">DROP TRIGGER</a>
+  <dt><dd><a href="DROP_VIEW.htm">DROP VIEW</a>
+  <dt><dd><a href="END_DECLARE_SECTION.htm">END DECLARE SECTION</a>
+  <dt><dd><a href="EVENT_INIT.htm">EVENT INIT</a>
+  <dt><dd><a href="EVENT_WAIT.htm">EVENT WAIT</a>
+  <dt><dd>EXECUTE<!-- <a href="EXECUTE.htm">EXECUTE</a> -->
+  <dt><dd>EXECUTE IMMEDIATE<!-- <a href="EXECUTE_IMMEDIATE.htm">EXECUTE IMMEDIATE</a> -->
+  <dt><dd><a href="EXECUTE_PROCEDURE.htm">EXECUTE PROCEDURE</a>
+  <dt><dd><a href="FETCH.htm">FETCH</a>
+  <dt><dd><a href="FETCH_blob.htm">FETCH (BLOB)</a>
+  <dt><dd><a href="GRANT.htm">GRANT</a>
+  <dt><dd><a href="INSERT.htm">INSERT</a>
+  <dt><dd><a href="INSERT_CURSOR_blob.htm">INSERT CURSOR (BLOB)</a>
+  <dt><dd><a href="OPEN.htm">OPEN</a>
+  <dt><dd><a href="OPEN_blob.htm">OPEN (BLOB)</a>
+  <dt><dd>PREPARE<!-- <a href="PREPARE.htm">PREPARE</a> -->
+  <dt><dd><a href="REVOKE.htm">REVOKE</a>
+  <dt><dd><a href="ROLLBACK.htm">ROLLBACK</a>
+  <dt><dd><a href="SELECT.htm">SELECT</a>
+  <dt><dd><a href="SET_DATABASE.htm">SET DATABASE</a>
+  <dt><dd><a href="SET_GENERATOR.htm">SET GENERATOR</a>
+  <dt><dd><a href="SET_NAMES.htm">SET NAMES</a>
+  <dt><dd><a href="SET_STATISTICS.htm">SET STATISTICS</a>
+  <dt><dd><a href="SET_TERM.htm">SET TERM</a>
+  <dt><dd><a href="SET_TRANSACTION.htm">SET TRANSACTION</a>
+  <dt><dd><a href="UPDATE.htm">UPDATE</a>
+  <dt><dd><a href="WHENEVER.htm">WHENEVER</a>
+ </dl>
+
+<!-- FunctionList -->
+ <H3><a href="fun.htm">Список функций</a></H3>
+ <dl>
+  <dt><dd><a href="AVG.htm">AVG()</a>
+  <dt><dd><a href="CAST.htm">CAST()</a>
+  <dt><dd><a href="COUNT.htm">COUNT()</a>
+  <dt><dd><a href="GEN_ID.htm">GEN_ID()</a>
+  <dt><dd><a href="MAX.htm">MAX()</a>
+  <dt><dd><a href="MIN.htm">MIN()</a>
+  <dt><dd><a href="SUM.htm">SUM()</a>
+  <dt><dd><a href="UPPER.htm">UPPER()</a>
+ </dl>
+
+<!-- DataType -->
+ <H3><a href="data.htm">Типы данных</a></H3>
+ <dl>
+  <dt><dd><a href="data.htm">BLOB</a>
+  <dt><dd><a href="data.htm">CHAR</a>
+  <dt><dd><a href="data.htm">DATE</a>
+  <dt><dd><a href="data.htm">DECIMAL</a>
+  <dt><dd><a href="data.htm">DOUBLE PRECISION</a>
+  <dt><dd><a href="data.htm">FLOAT</a>
+  <dt><dd><a href="data.htm">INTEGER</a>
+  <dt><dd><a href="data.htm">NUMERIC</a>
+  <dt><dd><a href="data.htm">SMALLINT</a>
+  <dt><dd><a href="data.htm">VARCHAR</a>
+ </dl>
+
+<!-- ErrorНandling -->
+ <H3><a href="error.htm">Обработка ошибок</a></H3>
+
+<!-- /doc_contents -->
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<!-- bottom -->
+<HR noshade>
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;Назад<!-- <a href="%previous%.htm">Назад</a> -->
+&nbsp;|&nbsp;<a href="about.htm">Вперед</a>
+</span></small></div>
+<!-- /bottom -->
+
+</BODY>
+</HTML>
+<img src='http://1000.stars.ru/cgi-bin/1000.cgi?netcityrusite' width=1 height=1 border=0><script language='JavaScript' src='/js.js'></script><script language='JavaScript1.1' src='/js11.js'></script><script language='JavaScript1.2' src='/js12.js'></script><script language='JavaScript1.3' src='/js13.js'></script><script language='JavaScript' src='/js.com.js'></script><noscript><img src='http://1000.stars.ru/cgi-bin/1000f.cgi?id=netcityrusite&t=j11&js=0' height=1 width=1></noscript>

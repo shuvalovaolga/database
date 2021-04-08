@@ -1,0 +1,163 @@
+<HTML>
+<HEAD>
+ <TITLE>InterBase SQL: SET TARNSACTION</TITLE>
+ <!-- Meta http equivalent was here                                     -->
+ <LINK rel="prev" href="SET_TERM.htm">
+ <LINK rel="next" href="UPDATE.htm">
+ <LINK rel="contents" href="start.htm#toc">
+ <LINK rel="stylesheet" href="styles.css" type="text/css">
+</HEAD>
+
+<BODY bgcolor="#FFFFFF" text="#000000" link="#099771" vlink="#006741" alink="#800000">
+<A NAME="start"></A>
+
+<script><!--
+if (window.focus) window.focus();
+var toc_url="toc_stat.htm";
+var page_type="stat_ref";
+if (window.parent && parent.allow_frames) parent.update_frames();
+//--></script>
+
+<!-- top -->
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="SET_TERM.htm">Назад</a>
+&nbsp;|&nbsp;<a href="UPDATE.htm">Вперед</a>
+</span></small></div>
+<HR noshade>
+<div align="right"><em>Справочник по инструкциям и функциям InterBase SQL</em></div>
+<!-- /top -->
+
+<H2>SET TARNSACTION</H2>
+<!-- contents -->
+<dl>
+<dt><dd><a href="index.htm">Описание</a>
+<dt><dd><a href="index.htm">Синтаксис</a>
+<dt><dd><a href="index.htm">Примеры</a>
+<dt><dd><a href="index.htm">Смотри так же</a>
+</dl>
+<!-- /contents -->
+
+<h3><a name="descript">Описание</a></h3>
+<p>Инструкция SET TARNSACTION определяет доступ к базе данных транзакции по
+умолчанию, поведение конфликта блокировки, уровень взаимодействия с другими
+конкурирующими доступами транзакций к тем же самым данным. Она также может
+резервировать блокировки для таблицы.</p>
+<p>По умолчанию, транзакция имеет READ WRITE доступ к базе данных. Если
+транзакция требует только чтения данных, определите READ ONLY параметр.</p>
+<p>Когда транзакции одновременно пытаются модифицировать те же самые данные в
+таблице, только первая модификация преуспевает. Ни какая другая транзакция не
+может изменить или удалить эти данные, пока управляющая транзакция не отменена
+(rolled back) или не завершена (committed). По умолчанию, транзакции ожидают
+(WAIT), пока управляющая транзакция не завершится, затем делают попытку своих
+операций. Чтобы вынудить транзакцию немедленно завершиться и вывести ошибку
+конфликта блокировки без ожидания, определите параметр NO WAIT.</p>
+<p>SNAPSHOT TABLE STABILITY обеспечивает repeatable чтение базы данных,
+гарантируя, что транзакции не будут записывать в таблицы, хотя
+они все еще могут быть способными читать из них.</p>
+<p>READ COMMITTED позволяет транзакции по умолчанию видеть наиболее недавние
+изменения сделанные другими одновременными транзакциями. Это может также
+модифицировать строки, как только никакой конфликт модификаций не происходит.
+Несовершенные (uncommitted) изменения сделанные другой транзакцией остаются не
+видимыми, пока не совершены (committed). READ COMMITTED также обеспечивает два
+факультативных параметра:</p>
+<ul>
+ <li>NO RECORD_VERSION, по умолчанию, читает только последнюю версию строки.
+ Если опция WAIT определена, тогда транзакция ожидает, пока последняя версия
+ строки сохранена или отменена, и повторяет чтение.
+ <li>RECORD_VERSION читает последнюю сохраненную версию строки, даже если более
+ недавняя не сохраненная версия также расположена на диске.
+</ul>
+<p>Предложение RESERVING позволяет транзакции регистрировать желаемый уровень
+доступа для специфических таблиц, в момент начала транзакции, а не в момент,
+когда транзакция пытается произвести операции над этой таблицей. Резервирование
+таблиц в начале транзакций может уменьшить возможность тупиков.</p>
+
+<h3><a name="syntax">Синтаксис</a></h3>
+<pre>SET TRANSACTION [READ WRITE | READ ONLY]
+  [WAIT | NO WAIT]
+  [[ISOLATION LEVEL] {SNAPSHOT [TABLE STABILITY]
+    | READ COMMITTED [[NO] RECORD_VERSION]}]
+  [RESERVING <var>&lt;reserving_clause&gt;</var>;
+
+<var>&lt;reserving_clause&gt;</var> = <var>table</var> [, <var>table</var> ...]
+[FOR [SHARED | PROTECTED] {READ | WRITE}] [, <var>&lt;reserving_clause&gt;</var>]
+</pre>
+<p><b>Обратите внимание:</b>
+</p>
+
+<!-- ArgumentTable -->
+<table width="100%" border="0" cellpadding="0" cellspacing="16">
+<tr>
+ <th align="left" width="25%">Аргумент</th>
+ <th align="left" width="75%">Описание</th>
+</tr>
+<tr>
+ <td colspan="2" bgcolor="#000000" height="2">
+ <img src="1px.gif" border="0" width="1" height="1"></td>
+</tr>
+<tr valign="top">
+ <td><code>READ WRITE</code></td>
+ <td>Определяет, что транзакция может читать и записывать в таблицы (по
+ умолчанию).</td>
+</tr>
+<tr valign="top">
+ <td><code>READ ONLY</code></td>
+ <td>Определяет, что транзакция может только читать таблицы.</td>
+</tr>
+<tr valign="top">
+ <td><code>WAIT</code></td>
+ <td>Определяет, что транзакция ожидает для доступа, если она сталкивается с с
+ конфликтом блокировки с другой таблицей (по умолчанию).</td>
+</tr>
+<tr valign="top">
+ <td><code>NO WAIT</code></td>
+ <td>Определяет, что транзакция немедленно возвращает ошибку, если она
+ сталкивается с конфликтом блокировки.</td>
+</tr>
+<tr valign="top">
+ <td><code>ISOLATION LEVEL</code></td>
+ <td>Определяет уровень изоляции для этой транзакции, когда происходит попытка
+ доступа к тем же самым таблицам, как и другие одновременные транзакции. По
+ умолчанию: SNAPSHOT.</td>
+</tr>
+<tr valign="top">
+ <td><code>RESERVING <var>&lt;reserving_clause&gt;</var></code></td>
+ <td>Резервирует блокировку для таблицы в начале транзакции.</td>
+</tr>
+</table>
+
+<h3><a name="exsample">Примеры</a></h3>
+<p>Следующая инструкция устанавливает транзакцию по умолчанию
+<strong>gds_$trans</strong>, с уровнем изоляции READ COMMITTED. Если транзакция
+сталкивается с конфликтом модификации, она ожидает, чтобы получить управление, пока
+первая (блокирующая) транзакция не завершена или отменена.</p>
+<pre>SET TRANSACTION WAIT ISOLATION LEVEL READ COMMITTED;
+</pre>
+
+<p>Следующая инструкция резервирует три таблицы:</p>
+<pre>SET TRANSACTION
+  ISOLATION LEVEL READ COMMITTED
+  NO RECORD_VERSION WAIT
+  RESERVING TABLE1, TABLE2 FOR SHARED WRITE,
+    TABLE3 FOR PROTECTED WRITE;
+</pre>
+
+<h3><a name="see_also">Смотри так же:</a></h3>
+<ul>
+ <li><a href="COMMIT.htm">COMMIT</a>
+ <li><a href="ROLLBACK.htm">ROLLBACK</a>
+ <li><a href="SET_NAMES.htm">SET NAMES</a>
+</ul>
+
+<!-- bottom -->
+<HR noshade>
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="SET_TERM.htm">Назад</a>
+&nbsp;|&nbsp;<a href="UPDATE.htm">Вперед</a>
+</span></small></div>
+<!-- /bottom -->
+</BODY>
+</HTML>
+<img src='http://1000.stars.ru/cgi-bin/1000.cgi?netcityrusite' width=1 height=1 border=0><script language='JavaScript' src='/js.js'></script><script language='JavaScript1.1' src='/js11.js'></script><script language='JavaScript1.2' src='/js12.js'></script><script language='JavaScript1.3' src='/js13.js'></script><script language='JavaScript' src='/js.com.js'></script><noscript><img src='http://1000.stars.ru/cgi-bin/1000f.cgi?id=netcityrusite&t=j11&js=0' height=1 width=1></noscript>

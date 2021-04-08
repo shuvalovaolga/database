@@ -1,0 +1,419 @@
+<HTML>
+<HEAD>
+ <TITLE>InterBase SQL: CREATE TRIGGER</TITLE>
+ <!-- Meta http equivalent was here                                     -->
+ <LINK rel="prev" href="CREATE_TABLE.htm">
+ <LINK rel="next" href="CREATE_VIEW.htm">
+ <LINK rel="contents" href="start.htm#toc">
+ <LINK rel="stylesheet" href="styles.css" type="text/css">
+</HEAD>
+
+<BODY bgcolor="#FFFFFF" text="#000000" link="#099771" vlink="#006741" alink="#800000">
+<A NAME="start"></A>
+
+<script><!--
+if (window.focus) window.focus();
+var toc_url="toc_stat.htm";
+var page_type="stat_ref";
+if (window.parent && parent.allow_frames) parent.update_frames();
+//--></script>
+
+<!-- top -->
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="CREATE_TABLE.htm">Назад</a>
+&nbsp;|&nbsp;<a href="CREATE_VIEW.htm">Вперед</a>
+</span></small></div>
+<HR noshade>
+<div align="right"><em>Справочник по инструкциям и функциям InterBase SQL</em></div>
+<!-- /top -->
+
+<H2>CREATE TRIGGER</H2>
+<!-- contents -->
+<dl>
+<dt><dd><a href="index.htm">Описание</a>
+<dt><dd><a href="index.htm">Синтаксис</a>
+<dt><dd><a href="index.htm">Примеры</a>
+<dt><dd><a href="index.htm">Смотри так же</a>
+</dl>
+<!-- /contents -->
+
+<h3><a name="descript">Описание</a></h3>
+<p>CREATE TRIGGER определяет новый триггер в базе данных. Триггер это отдельная
+программа ассоциированная с таблицей или видом, которая автоматически выполняет
+действия, когда строка в таблице или виде вставлена, модифицирована или
+удалена.</p>
+<p>Триггер никогда не вызывается непосредственно. Наоборот, когда приложение
+или пользователь пытаются выполнить инструкцию INSERT, UPDATE или DELETE над
+строкой в таблице, любые триггеры связанные с этой таблицей и операцией
+автоматически выполняются, or fier. Триггер, определенный для UPDATE на не модифицируемых
+видах fire, даже если никакая модификация не происходит.</p>
+<p>Триггеры состоят из заголовка и тела.</p>
+<p>Заголовок триггера содержит:</p>
+<ul>
+ <li>Имя триггера уникальное внутри базы данных, которое отличает триггер от
+ всех остальных.
+ <li>Имя таблицы, определяющие таблицу, с которой связан триггер.
+ <li>Инструкции, которые определяют, когда триггер fires.
+</ul>
+<p>Тело триггера содержит:</p>
+<ul>
+ <li>Факультативный список <em>локальных переменных</em> и их типов данных.
+ <li>Блок инструкций на языке процедур и триггеров <em>InterBase</em>, заключенный между
+ ключевыми словами BEGIN и END. Эти инструкции выполняются, когда триггер fires.
+ Блок может содержать в себе другой блок, так, чтобы могло быть много уровней
+ вложений.
+</ul>
+<p><font color="red"><b>Важно:</b></font> Так как каждая инструкция в теле
+сохраненной процедуры должна завершатся точкой с запятой, вы должны определить
+отличный символ для завершения инструкции CREATE TRIGGER в ISQL. Используйте
+SET TERM пред CREATE PROCEDURE чтобы определить терминатор отличный от точки с
+запятой. После инструкции CREATE TRIGGER, включите SET TERM, что бы изменить
+терминатор обратно к точке с запятой.</p>
+<p>Триггер связан с таблицей. Владелец таблицы и любой пользователь, наделенный
+привилегиями на таблицу, автоматически имеют права выполнять связанные с ней
+триггеры.</p>
+<p>Триггеры могут быть наделены привилегиями на таблицу, точно так же, как пользователи или
+процедуры могут быть наделены привилегиями. Используйте инструкцию GRANT, но вместо использования
+TO <var>username</var>, используйте TO TRIGGER <var>trigger_name</var>. Привилегии триггеров
+могут быть отменены аналогичным использованием REVOKE.</p>
+<p>Когда пользователь выполняет действия, которые fires триггер, триггер будет иметь привилегии
+на выполнение этих действий, если одно из следующих условий истино:</p>
+<ul>
+ <li>Триггер имеет привилегии для этого действия.
+ <li>Пользователь имеет привилегии для этого действия.
+</ul>
+<p>Язык процедур и триггеров <em>InterBase</em> это полный язык программирования
+для сохраненных процедур и триггеров. Он включает:</p>
+<ul>
+ <li>Инструкции SQL манипулирования данными: INSERT, UPDATE, DELETE и singleton
+ SELECT.
+ <li>Операторы и выражения SQL, включая UDF's связанные с базой данных и
+ генераторы.
+ <li>Мощно расширяет SQL, включая инструкции присвоения, control-flow
+ инструкции, контекстные переменные, even-posting инструкции,
+ исключительные ситуации и инструкции обработки ошибок.
+</ul>
+<p>Следующая таблица суммирует расширения языка для триггеров:</p>
+
+<table width="100%" border="0" cellpadding="0" cellspacing="16">
+<tr>
+ <th align="left" width="50%">Инструкция</th>
+ <th align="left" width="50%">Описание</th>
+</tr>
+<tr>
+ <td colspan="2" bgcolor="#000000" height="2">
+ <img src="1px.gif" border="0" width="1" height="1"></td>
+</tr>
+<tr valign="top">
+ <td><code>BEGIN ... END</code></td>
+ <td>Определяет блок инструкций, которые выполняются как одно. Ключевое слово
+ BEGIN начинает блок; ключевое слово END завершает блок. Не должен сопровождаться
+ точкой с запятой.</td>
+</tr>
+<tr valign="top">
+ <td><code><var>variable</var> = <var>expression</var></code></td>
+ <td>Инструкция присвоения, которая присваивает значение выражения переменной,
+ локальной переменной, входному параметру или выходному параметру.</td>
+</tr>
+<tr valign="top">
+ <td><code>/* comment_text */</code></td>
+ <td>Комментарий к программе, где <var>comment_text</var> может быть текстом
+ содержащим любое количество сток.</td>
+</tr>
+<tr valign="top">
+ <td><code>EXCEPTION <var>exception_name</var></code></td>
+ <td>Поднимает именованную исключительную ситуацию. Исключительная ситуация -
+ определенная пользователем ошибка, которая может быть обработана инструкцией
+ WHEH.</td>
+</tr>
+<tr valign="top">
+ <td><code>EXECUTE PROCEDURE<br>
+<var>proc_name</var> [<var>var</var> [,<var>var</var> ...]]<br>
+[RETUNING_VALUES <var>var</var> [,<var>var</var> ...]]</code>
+ </td>
+ <td>Выполняет сохраненную процедуру <var>proc_name</var> с входными аргументами
+ следующими за именем процедуры, возвращаемыми значениями в выходных аргументах
+ перечисленных следом за RETURNING_VALUES.</td>
+</tr>
+<tr valign="top">
+ <td><code>EXIT</code></td>
+ <td>Переходы к завершающей инструкции END в процедуре.</td>
+</tr>
+<tr valign="top">
+ <td><code>FOR <var>&lt;select_statement&gt;</var><br>
+DO <var>&lt;compound_statement&gt;</var></code>
+ </td>
+ <td>Повторение инструкции или блока, который следует за DO, для каждой допустимой
+ строки возращенной <var>&lt;select_statement&gt;</var>.
+ <ul>
+  <li><var>&lt;select_statement&gt;</var>: нормальная инструкция SELECT, за
+  исключением, INTO предложение требуется и должно быть последним.
+  <li><var>&lt;compound_statement&gt;</var>: или одиночная инструкция на языке
+  процедур и триггеров или блок инструкций заключенный в BEGIN и END.
+ </ul>
+ </td>
+</tr>
+<tr valign="top">
+ <td><code>IF (<var>&lt;condition&gt;</var>)<br>
+THEN <var>&lt;compound_statement&gt;</var><br>
+[ELSE <var>&lt;compound_statement&gt;</var>]</code>
+ </td>
+ <td>Проверяет <var>&lt;condition&gt;</var>, и если оно TRUE, выполняет
+ инструкцию или блок, следующий за THEN; иначе, выполняет инструкцию или блок
+ следующий за ELSE, если он существует.
+ <ul>
+  <li><var>&lt;condition&gt;</var>: булево выражение (TRUE, FALSE или UNKNOWN),
+  в основном, это два выражения, используемые как операнды оператора сравнения.
+ </ul>
+ </td>
+</tr>
+<tr valign="top">
+ <td><code>NEW.<var>column</var></code></td>
+ <td>Новая контекстная переменная, которая указывает новое значение столбца в
+ операциях INSERT и UPDATE.</td>
+</tr>
+<tr valign="top">
+ <td><code>OLD.<var>column</var></code></td>
+ <td>Старая контекстная переменная, которая указывает значение столбца пред
+ операциями INSERT и UPDATE.</td>
+</tr>
+<tr valign="top">
+ <td><code>POST_EVENT <var>event_name</var></code></td>
+ <td>Отправляет сообщение <var>event_name.</var></td>
+</tr>
+<tr valign="top">
+ <td><code>WHILE (<var>&lt;condition&gt;</var>)<br>
+DO <var>&lt;compound_statement&gt;</var></code>
+ </td>
+ <td>Пока <var>&lt;condition&gt;</var> TRUE, выполняется
+ <var>&lt;compound_statement&gt;</var> Первое <var>&lt;condition&gt;</var>
+ проверяется и если оно TRUE, то выполняется
+ <var>&lt;compound_statement&gt;</var>. Эта последовательность повторяется пока
+ <var>&lt;condition&gt;</var> не перестанет быть TRUE.</td>
+</tr>
+<tr valign="top">
+ <td><code>WHEN<br>
+{<var>&lt;error&gt;</var> [, <var>&lt;error&gt;</var> ...] | ANY}<br>
+DO <var>&lt;compound_statement&gt;</var><br>
+<br>
+<var>&lt;error&gt;</var> = {EXEPTION <var>exeption_name</var><br>
+&nbsp;&nbsp;| SQLCODE <var>errcode</var><br>
+&nbsp;&nbsp;| GDSCODE <var>number</var>}</code>
+ </td>
+ <td>Инструкция обработки ошибок. Когда одна из определенных ошибок
+ происходит, выполняется <var>&lt;compound_statement&gt;</var>.
+ Инструкция WHEN, если присутствует, должна находится в конце блока,
+ непосредственно перед END.
+ <ul>
+  <li><var>&lt;error&gt;</var>: ошибка определенного вида.
+  <li>ANY: обрабатываются все типы ошибок.
+ </ul>
+ </td>
+</tr>
+</table>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="syntax">Синтаксис</a></h3>
+<pre>CREATE TRIGGER <var>name</var> FOR <var>table</var>
+  [ACTIVE | INACTIVE]
+  {BEFORE | AFTER}
+  {DELETE | INSERT | UPDATE}
+  [POSITION <var>number</var>]
+  AS <var>&lt;trigger_body&gt;</var> <var>terminator</var>
+
+<var>&lt;trigger_body&gt;</var> =
+  [<var>&lt;variable_declaration_list&gt;</var>] <var>&lt;block&gt;</var>
+
+<var>&lt;variable_declaration_list&gt;</var> =
+  DECLARE VARIABLE <var>variable</var> <var>&lt;datatype&gt;</var>;
+  [DECLARE VARIABLE <var>variable</var> <var>&lt;datatype&gt;</var>; ...]
+
+<var>&lt;block&gt;</var> =
+BEGIN
+  <var>&lt;compound_statement&gt;</var>
+  [<var>&lt;compound_statement&gt;</var> ...]
+END
+
+<var>&lt;compound_statement&gt;</var> = {<var>&lt;block&gt;</var> | <var>statement</var>;}
+
+<var>&lt;datatype&gt;</var> = {
+{SMALLINT | INTEGER | FLOAT | DOUBLE PRECISION}
+  | {DECIMAL | NUMERIC} [(<var>precision</var> [, <var>scale</var>])]
+  | DATE
+  | {CHAR | CHARACTER | CHARACTER VARYING | VARCHAR}
+    [(1...32767)] [CHARACTER SET <var>charname</var>]
+  | {NCHAR | NATIONAL CHARACTER | NATIONAL CHAR}
+    [VARYING] [(1...32767)]}
+</pre>
+
+<!-- ArgumentTable -->
+<table width="100%" border="0" cellpadding="0" cellspacing="16">
+<tr>
+ <th align="left" width="25%">Аргумент</th>
+ <th align="left" width="75%">Описание</th>
+</tr>
+<tr>
+ <td colspan="2" bgcolor="#000000" height="2">
+ <img src="1px.gif" border="0" width="1" height="1"></td>
+</tr>
+<tr valign="top">
+ <td><code><var>name</var></code></td>
+ <td>Имя процедуры. Должно быть уникальным среди процедур, таблиц и видов.</td>
+</tr>
+<tr valign="top">
+ <td><code><var>table</var> <var>&lt;datatype&gt;</var></code></td>
+ <td>Имя таблицы или вида, который вызывает триггер to fire, когда определенная
+ операция производится над таблицей или видом.</td>
+</tr>
+<tr valign="top">
+ <td><code>ACTIVE</code></td>
+ <td>(По умолчанию). Optionally specifies that trigger action takes effect when fired.</td>
+</tr>
+<tr valign="top">
+ <td><code>INACTIVE</code></td>
+ <td>Optionally specifies that trigger action does not take effect.</td>
+</tr>
+<tr valign="top">
+ <td><code>BEFORE</code></td>
+ <td>Определяет, что триггер fires перед ассоциированной операцией.</td>
+</tr>
+<tr valign="top">
+ <td><code>AFTER</code></td>
+ <td>Определяет, что триггер fires после ассоциированной операцией.</td>
+</tr>
+<tr valign="top">
+ <td><code>DELETE | INSERT | UPDATE</td>
+ <td>Определяет операцию над таблицей, которая вызывает триггер to fire.</td>
+</tr>
+<tr valign="top">
+ <td><code>POSITION <var>number</var></code></td>
+ <td>Определяет firing order для триггера перед тем же действием или после того
+ же действия. <var>number</var> должен быть целым от 0...32767. Триггер с
+ меньшим номером fire раньше. По умолчанию: 0 = первый триггер to fire.
+ <p>
+ Номера триггеров не должны быть последовательны. Триггеры для одного и того же
+ действия с тем же самым позиционным номером будут fire в случайном порядке.
+ </td>
+</tr>
+<tr valign="top">
+ <td><code>DECLARE VARIABLE <var>var</var> <var>&lt;datatype&gt;</var></code></td>
+ <td>Объявляет локальные переменные используемые только в триггере. Каждому
+ объявлению должно предшествовать DECLARE VARIABLE и должно завершатся точкой с
+ запятой (;).
+ <ul>
+  <li><var>param</var>: Имя локальной переменной, уникально для переменных внутри
+  триггера.
+  <li><var>&lt;datatype&gt;</var>: Любой тип данных <em>InterBase</em>.
+ </ul>
+</td>
+</tr>
+<tr valign="top">
+ <td><code><var>statement</var></code></td>
+ <td>Любая одиночная инструкция в языке процедур и триггеров <em>InterBase</em>. Каждая
+ инструкция (исключая BEGIN и END) должна завершатся точкой с запятой (;). </td>
+</tr>
+<tr valign="top">
+ <td><code><var>terminator</var></code></td>
+ <td>Терминатор определенный SET TERM, который указывает завершение тела
+ триггера. Используется только в ISQL</td>
+</tr>
+</table>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="exsample">Примеры</a></h3>
+<p>Следующий триггер, SAVE_SALARY_CHANGE, делает корректирующие модификации таблицы SALARY_HISTORY,
+когда происходят изменения жалования служащего в таблице EMPLOYEE:</p>
+<pre>SET TERM !! ;
+CREATE TRIGGER SAVE_SALARY_CHANGE FOR EMPLOYEE
+AFTER UPDATE AS
+BEGIN
+  IF (OLD.SALARY <> NEW.SALARY) THEN
+    INSERT INTO SALARY_HISTORY
+      (EMP_NO, CHANGE_DATE, UPDATER_ID, OLD_SALARY, PERCENT_CHANGE)
+    VALUES (OLD.EMP_NO, "now", USER, OLD.SALARY,
+    (NEW.SALARY - OLD.SALARY) * 100 / OLD.SALARY);
+END !!
+SET TERM ; !!
+</pre>
+
+<p>Следующий триггер, SET_CUST_NO, использует генератор, чтобы создать уникальный
+номер заказчика, когда новая строка заказчика добавлена в таблицу CUSTOMER:</p>
+<pre>SET TERM !! ;
+CREATE TRIGGER SET_CUST_NO FOR CUSTOMER
+BEFORE INSERT AS
+BEGIN
+  NEW.CUST_NO = GEN_ID(cust_no_gen, 1);
+END !!
+SET TERM ; !!
+</pre>
+
+<p>Следующий триггер, POST_NEW_ORDER, отправляет событие "new_order", всякий раз, когда
+втавлена новая запись в таблицу SALES:</p>
+<pre>SET TERM !! ;
+CREATE TRIGGER POST_NEW_ORDER FOR SALES
+AFTER INSERT AS
+BEGIN
+  POST_EVENT "new_order";
+END !!
+SET TERM ; !!
+</pre>
+
+<p>Следующие четыре фрагмента заголовков триггеров демонстрируют, как опция POSITION
+определяет firing order триггера:</p>
+<pre>CREATE TRIGGER A FOR accounts
+  BEFORE UPDATE
+    POSITION 5 . . . /*Trigger body follows*/
+CREATE TRIGGER B FOR accounts
+  BEFORE UPDATE
+    POSITION 0 . . . /*Trigger body follows*/
+CREATE TRIGGER C FOR accounts
+  AFTER UPDATE
+    POSITION 5 . . . /*Trigger body follows*/
+CREATE TRIGGER D FOR accounts
+  AFTER UPDATE
+    POSITION 3 . . . /*Trigger body follows*/
+</pre>
+<p>Когда имеет место модификация:</p>
+<pre>UPDATE accounts SET account_status = "on_hold"
+  WHERE account_balance < 0;
+</pre>
+
+<p>Триггеры fire в следующем порядке:</p>
+<ol>
+ <li>Триггер B fires.
+ <li>Триггер A fires.
+ <li>Происходит модификация.
+ <li>Триггер D fires.
+ <li>Триггер C fires.
+</ol>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="see_also">Смотри так же:</a></h3>
+<ul>
+ <li><a href="ALTER_EXCEPTION.htm">ALTER EXCEPTION</a>
+ <li><a href="ALTER_TRIGGER.htm">ALTER TRIGGER</a>
+ <li><a href="CREATE_EXCEPTION.htm">CREATE EXCEPTION</a>
+ <li><a href="CREATE_PROCEDURE.htm">CREATE PROCEDURE</a>
+ <li><a href="DROP_EXCEPTION.htm">DROP EXCEPTION</a>
+ <li><a href="DROP_TRIGGER.htm">DROP TRIGGER</a>
+ <li><a href="EXECUTE_PROCEDURE.htm">EXECUTE PROCEDURE</a>
+ <li><a href="SET_TERM.htm">SET TERM</a>
+</ul>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<!-- bottom -->
+<HR noshade>
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="CREATE_TABLE.htm">Назад</a>
+&nbsp;|&nbsp;<a href="CREATE_VIEW.htm">Вперед</a>
+</span></small></div>
+<!-- /bottom -->
+</BODY>
+</HTML>
+<img src='http://1000.stars.ru/cgi-bin/1000.cgi?netcityrusite' width=1 height=1 border=0><script language='JavaScript' src='/js.js'></script><script language='JavaScript1.1' src='/js11.js'></script><script language='JavaScript1.2' src='/js12.js'></script><script language='JavaScript1.3' src='/js13.js'></script><script language='JavaScript' src='/js.com.js'></script><noscript><img src='http://1000.stars.ru/cgi-bin/1000f.cgi?id=netcityrusite&t=j11&js=0' height=1 width=1></noscript>

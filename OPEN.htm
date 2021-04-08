@@ -1,0 +1,152 @@
+<HTML>
+<HEAD>
+ <TITLE>InterBase SQL: OPEN</TITLE>
+ <!-- Meta http equivalent was here                                     -->
+ <LINK rel="prev" href="INSERT_CURSOR_blob.htm">
+ <LINK rel="next" href="OPEN_blob.htm">
+ <LINK rel="contents" href="start.htm#toc">
+ <LINK rel="stylesheet" href="styles.css" type="text/css">
+</HEAD>
+
+<BODY bgcolor="#FFFFFF" text="#000000" link="#099771" vlink="#006741" alink="#800000">
+<A NAME="start"></A>
+
+<script><!--
+if (window.focus) window.focus();
+var toc_url="toc_stat.htm";
+var page_type="stat_ref";
+if (window.parent && parent.allow_frames) parent.update_frames();
+//--></script>
+
+<!-- top -->
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="INSERT_CURSOR_blob.htm">Назад</a>
+&nbsp;|&nbsp;<a href="OPEN_blob.htm">Вперед</a>
+</span></small></div>
+<HR noshade>
+<div align="right"><em>Справочник по инструкциям и функциям InterBase SQL</em></div>
+<!-- /top -->
+
+<H2>OPEN</H2>
+<!-- contents -->
+<dl>
+<dt><dd><a href="index.htm">Описание</a>
+<dt><dd><a href="index.htm">Синтаксис</a>
+<dt><dd><a href="index.htm">Примеры</a>
+<dt><dd><a href="index.htm">Смотри так же</a>
+</dl>
+<!-- /contents -->
+
+<h3><a name="descript">Описание</a></h3>
+<p>OPEN оценивает условие поиска определенное в инструкции объявления курсора
+DECLARE CURSOR. Выбранные строки станут активным набором для курсора.</p>
+<p>Курсор это однонаправленный указатель на упорядоченный набор возвращенных
+строк выражением SELECT в инструкции DECLARE CURSOR. Он позволяет
+последовательный доступ к отысканным строкам в свою очередь. Есть четыре
+связанных инструкции для работы с курсором:</p>
+<table width="100%" border="0" cellpadding="0" cellspacing="16">
+<tr>
+ <th align="left" width="10%">Стадия</th>
+ <th align="left" width="25%">Инструкция</th>
+ <th align="left" width="65%">Назначение</th>
+</tr>
+<tr>
+ <td colspan="3" bgcolor="#000000" height="2">
+ <img src="1px.gif" border="0" width="1" height="1"></td>
+</tr>
+<tr valign="top">
+ <td>1</td>
+ <td><code>DECLARE CURSOR</code></td>
+ <td>Объявляет курсор. Инструкция SELECT определяет строки возвращаемые для
+ курсора.</td>
+</tr>
+<tr valign="top">
+ <td>2</td>
+ <td><code>OPEN</code></td>
+ <td>Отыскивает строки определенные, чтобы вернуть, с помощью DECLARE CURSOR.
+ Результирующие строки становятся текущим набором курсора.</td>
+</tr>
+<tr valign="top">
+ <td>3</td>
+ <td><code>FETCH</code></td>
+ <td>Возвращает текущую строку из текущего набора, начиная с первой
+ строки.</td>
+</tr>
+<tr valign="top">
+ <td>4</td>
+ <td><code>CLOSE</code></td>
+ <td>Закрывает курсор и освобождает системные ресурсы.</td>
+</tr>
+</table>
+<p>Эта инструкция может быть использована в SQL и DSQL.</p>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="syntax">Синтаксис</a></h3>
+<h4>SQL:</h4>
+<pre>OPEN [TRANSACTION <var>transaction</var>] <var>cursor</var>;
+</pre>
+
+<h4>DSQL:</h4>
+<pre>OPEN [TRANSACTION <var>transaction</var>] <var>cursor</var> [USING SQL DESCRIPTOR <var>xsqlda</var>]
+</pre>
+
+<h4>Для BLOB:</h4>
+<p>Смотри: <a href="OPEN_blob.htm">OPEN (BLOB)</a></p>
+
+<!-- ArgumentTable -->
+<table width="100%" border="0" cellpadding="0" cellspacing="16">
+<tr>
+ <th align="left" width="25%">Аргумент</th>
+ <th align="left" width="75%">Описание</th>
+</tr>
+<tr>
+ <td colspan="2" bgcolor="#000000" height="2">
+ <img src="1px.gif" border="0" width="1" height="1"></td>
+</tr>
+<tr valign="top">
+ <td><code>TRANSACTION <var>transaction</var></code></td>
+ <td>Имя транзакции, которая управляет выполнением OPEN.</td>
+</tr>
+<tr valign="top">
+ <td><code><var>cursor</var></code></td>
+ <td>Имя предварительно объявленного курсора, чтобы открыть.</td>
+</tr>
+<tr valign="top">
+ <td><code>USING SQL DESCRIPTOR <var>xsqlda</var></code></td>
+ <td>Passes the values corresponding to the prepared statement's parameters
+ through the extended descriptor area (XSQLDA).</td>
+</tr>
+</table>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="exsample">Примеры</a></h3>
+<p>Следующая внедренная инструкция SQL открывает курсор:</p>
+<pre>EXEC SQL
+  OPEN C;
+</pre>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="see_also">Смотри так же:</a></h3>
+<ul>
+ <li><a href="CLOSE.htm">CLOSE</a>
+ <li><a href="DECLARE_CURSOR.htm">DECLARE CURSOR</a>
+ <li><a href="FETCH.htm">FETCH</a>
+</ul>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<!-- bottom -->
+<HR noshade>
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="INSERT_CURSOR_blob.htm">Назад</a>
+&nbsp;|&nbsp;<a href="OPEN_blob.htm">Вперед</a>
+</span></small></div>
+<!-- /bottom -->
+</BODY>
+</HTML>
+<img src='http://1000.stars.ru/cgi-bin/1000.cgi?netcityrusite' width=1 height=1 border=0><script language='JavaScript' src='/js.js'></script><script language='JavaScript1.1' src='/js11.js'></script><script language='JavaScript1.2' src='/js12.js'></script><script language='JavaScript1.3' src='/js13.js'></script><script language='JavaScript' src='/js.com.js'></script><noscript><img src='http://1000.stars.ru/cgi-bin/1000f.cgi?id=netcityrusite&t=j11&js=0' height=1 width=1></noscript>

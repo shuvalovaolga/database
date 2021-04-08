@@ -1,0 +1,139 @@
+<HTML>
+<HEAD>
+ <TITLE>InterBase SQL: CREATE INDEX</TITLE>
+ <!-- Meta http equivalent was here                                     -->
+ <LINK rel="prev" href="CREATE_GENERATOR.htm">
+ <LINK rel="next" href="CREATE_PROCEDURE.htm">
+ <LINK rel="contents" href="start.htm#toc">
+ <LINK rel="stylesheet" href="styles.css" type="text/css">
+</HEAD>
+
+<BODY bgcolor="#FFFFFF" text="#000000" link="#099771" vlink="#006741" alink="#800000">
+<A NAME="start"></A>
+
+<script><!--
+if (window.focus) window.focus();
+var toc_url="toc_stat.htm";
+var page_type="stat_ref";
+if (window.parent && parent.allow_frames) parent.update_frames();
+//--></script>
+
+<!-- top -->
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="CREATE_GENERATOR.htm">Назад</a>
+&nbsp;|&nbsp;<a href="CREATE_PROCEDURE.htm">Вперед</a>
+</span></small></div>
+<HR noshade>
+<div align="right"><em>Справочник по инструкциям и функциям InterBase SQL</em></div>
+<!-- /top -->
+
+<H2>CREATE INDEX</H2>
+<!-- contents -->
+<dl>
+<dt><dd><a href="index.htm">Описание</a>
+<dt><dd><a href="index.htm">Синтаксис</a>
+<dt><dd><a href="index.htm">Примеры</a>
+<dt><dd><a href="index.htm">Смотри так же</a>
+</dl>
+<!-- /contents -->
+
+<h3><a name="descript">Описание</a></h3>
+<p>Используйте CREATE INDEX, что бы улучшить скорость доступа к данным.
+Использование индекса для столбцов, которые появляются в предложении WHERE, может
+улучшить эффективность поиска.</p>
+<p><b>Важно:</b>
+Столбцы типов BLOB и массивы не могут быть индексированы.</p>
+<p>UNIQUE индекс не может быть создан на столбце или наборе столбцов, которые уже
+содержат повторяющиеся или NULL значения.</p>
+<p>ASC и DESC определяют порядок, в котором индекс сортирован. Для более быстрого
+ответа на запросы, используйте индексы, порядок которых соответствует
+предложению ORDER BY запроса. И ASC, и DESC индекс может быть создан на одном и
+том же столбце или наборе столбцов, чтобы обратится к данным в различном
+порядке.</p>
+<p><b>Совет:</b>
+Для улучшения эффективности индекса, use SET STATISTICS to recompute index
+selectivity, or rebuild the index by making it inactive, then active with
+sequential calls to ALTER INDEX.</p>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="syntax">Синтаксис</a></h3>
+<pre>CREATE [UNIQUE] [ASC[ENDING] | DESC[ENDING]]
+INDEX <var>index</var> ON <var>table</var> (<var>col</var> [, <var>col</var> ...]);
+</pre>
+
+<!-- ArgumentTable -->
+<table width="100%" border="0" cellpadding="0" cellspacing="16">
+<tr>
+ <th align="left" width="25%">Аргумент</th>
+ <th align="left" width="75%">Описание</th>
+</tr>
+<tr>
+ <td colspan="3" bgcolor="#000000" height="2"><img src="1px.gif" border="0" width="1" height="1"></td>
+</tr>
+<tr valign="top">
+ <td><code>UNIQUE</code></td>
+ <td>Предотвращает вставку или модификацию данных,
+ приводящих к дублированию значений в индексированных столбцах.</td>
+</tr>
+<tr valign="top">
+ <td><code>ASC[ENDING]</code></td>
+ <td>Сортирует столбцы в возрастающем порядке, это порядок по умолчанию если ничего не определено.</td>
+</tr>
+<tr valign="top">
+ <td><code>DESC[ENDING]</code></td>
+ <td>Сортирует столбцы в убывающем порядке.</td>
+</tr>
+<tr valign="top">
+ <td><code><var>index</var></code></td>
+ <td>Уникальное имя для индекса.</td>
+</tr>
+<tr valign="top">
+ <td><code><var>table</var></code></td>
+ <td>Имя таблицы для которой индекс определен.</td>
+</tr>
+<tr valign="top">
+ <td><code><var>col</var></code></td>
+ <td>Столбец в индексируемой таблице.</td>
+</tr>
+</table>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="exsample">Примеры</a></h3>
+<p>Следующая инструкция создает уникальный индекс:</p>
+<pre>CREATE UNIQUE INDEX PRODTYPEX ON PROJECT (PRODUCT, PROJ_NAME);
+</pre>
+
+<p>Следующая инструкция создает убывающий индекс:</p>
+<pre>CREATE DESCENDING INDEX CHANGEX ON SALARY_HISTORY (CHANGE_DATE);
+</pre>
+
+<p>Следующая инструкция создает индекс, состоящий из двух столбцов:</p>
+<pre>CREATE INDEX NAMEX ON EMPLOYEE (LAST_NAME, FIRST_NAME);
+</pre>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="see_also">Смотри так же:</a></h3>
+<ul>
+ <li><a href="ALTER_INDEX.htm">ALTER INDEX</a>
+ <li><a href="DROP_INDEX.htm">DROP INDEX</a>
+ <li><a href="SELECT.htm">SELECT</a>
+ <li><a href="SET_STATISTICS.htm">SET STATISTICS</a>
+</ul>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<!-- bottom -->
+<HR noshade>
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="CREATE_GENERATOR.htm">Назад</a>
+&nbsp;|&nbsp;<a href="CREATE_PROCEDURE.htm">Вперед</a>
+</span></small></div>
+<!-- /bottom -->
+</BODY>
+</HTML>
+<img src='http://1000.stars.ru/cgi-bin/1000.cgi?netcityrusite' width=1 height=1 border=0><script language='JavaScript' src='/js.js'></script><script language='JavaScript1.1' src='/js11.js'></script><script language='JavaScript1.2' src='/js12.js'></script><script language='JavaScript1.3' src='/js13.js'></script><script language='JavaScript' src='/js.com.js'></script><noscript><img src='http://1000.stars.ru/cgi-bin/1000f.cgi?id=netcityrusite&t=j11&js=0' height=1 width=1></noscript>

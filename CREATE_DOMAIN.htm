@@ -1,0 +1,243 @@
+<HTML>
+<HEAD>
+ <TITLE>InterBase SQL: CREATE DOMAIN</TITLE>
+ <!-- Meta http equivalent was here                                     -->
+ <LINK rel="prev" href="CREATE_DATABASE.htm">
+ <LINK rel="next" href="CREATE_EXCEPTION.htm">
+ <LINK rel="contents" href="start.htm#toc">
+ <LINK rel="stylesheet" href="styles.css" type="text/css">
+</HEAD>
+
+<BODY bgcolor="#FFFFFF" text="#000000" link="#099771" vlink="#006741" alink="#800000">
+<A NAME="start"></A>
+
+<script><!--
+if (window.focus) window.focus();
+var toc_url="toc_stat.htm";
+var page_type="stat_ref";
+if (window.parent && parent.allow_frames) parent.update_frames();
+//--></script>
+
+<!-- top -->
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="CREATE_DATABASE.htm">Назад</a>
+&nbsp;|&nbsp;<a href="CREATE_EXCEPTION.htm">Вперед</a>
+</span></small></div>
+<HR noshade>
+<div align="right"><em>Справочник по инструкциям и функциям InterBase SQL</em></div>
+<!-- /top -->
+
+<H2>CREATE DOMAIN</H2>
+<!-- contents -->
+<dl>
+<dt><dd><a href="index.htm">Описание</a>
+<dt><dd><a href="index.htm">Синтаксис</a>
+<dt><dd><a href="index.htm">Примеры</a>
+<dt><dd><a href="index.htm">Смотри так же</a>
+</dl>
+<!-- /contents -->
+
+<h3><a name="descript">Описание</a></h3>
+<p>Инструкция CREATE DOMAIN создает наследуемое определение столбца, оно
+используется как шаблон при определении столбцов в инструкциях CREATE TABLE или
+ALTER TABLE. Определение домена содержит установки характеристик, которые
+включают:</p>
+<ul>
+ <li>Тип данных.
+ <li>Факультативно значение по умолчанию.
+ <li>Факультативно недопустимость значения NULL.
+ <li>Факультативно CHECK ограничения.
+ <li>Факультативно порядок сортировки.
+</ul>
+<p>CHECK ограничения в определении домена устанавливают <var>&lt;dom_search_condition&gt;</var>,
+которые должны быть истины для данных введенных в столбецы, базирующиеся на домене.
+CHECK ограничения не могут ссылаться на любой домен или столбец.</p>
+<p><b>Обратите внимание:</b>
+Будте осторожны при создании домена. Возможно, создать домен с противоречивыми
+ограничениями, например, как объявление домена NOT NULL и назначения его
+DEFAULT значение к NULL.</p>
+<p>CHAR, VARCHAR или BLOB-текст спецификация типа данных в определении домена
+может включать CHARACTER SET предложение, для определения кодировки домена.
+Иначе, домен использует определенную по умолчанию кодировку для базы данных.</p>
+<p>COLLATE предложение дает возможность описать орпределенный порядок сортировки
+для CHAR, VARCHAR и BLOB-техт типа данных. Выбор типа сортировки ограничен
+поддерживаемыми для данной кодировки домена, которая является либо заданной по
+умолчанию для всей базы данных, либо определенной в предложении CHARACTER SET,
+как часть определения типа данных. Смотри <em>Language Reference</em>, что
+бы получить полный список возможных сортировок.</p>
+<p>Столбцы базирующиеся на определении домена наследуют все характеристики
+домена. Значение по умолчанию, порядок сортировки и NOT NULL установка могут
+быть преопределены, когда определяется столбец основаный на домене. Столбец
+остнованый на домене может добавлять дополнительные CHECK ограничения к CHECK
+ограничению домена.</p>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="syntax">Синтаксис</a></h3>
+<!-- SyntaxCode -->
+<pre>CREATE DOMAIN <var>domain</var> [AS] <var>&lt;datatype&gt;</var>
+
+[DEFAULT {<var>literal</var> | NULL | USER}]
+  [NOT NULL] [CHECK (<var>&lt;dom_search_condition&gt;</var>)]
+  [COLLATE <var>collation</var>];
+</pre>
+<p><b>Обратите внимание:</b> COLLATE предложение не может быть определено для
+BLOB столбца.</p>
+
+<pre><var>&lt;datatype&gt;</var> = {
+{SMALLINT | INTEGER | FLOAT | DOUBLE PRECISION} [<var>&lt;array_dim&gt;</var>]
+  | {DECIMAL | NUMERIC} [(<var>precision</var> [, <var>scale</var>])] [<var>&lt;array_dim&gt;</var>]
+  | DATE [<var>&lt;array_dim&gt;</var>]
+  | {CHAR | CHARACTER | CHARACTER VARYING | VARCHAR}
+    [(1...32767)] [<var>&lt;array_dim&gt;</var>] [CHARACTER SET <var>charname</var>]
+  | {NCHAR | NATIONAL CHARACTER | NATIONAL CHAR}
+    [VARYING] [(1...32767)] [<var>&lt;array_dim&gt;</var>]
+  | BLOB [SUB_TYPE {<var>int</var> | <var>subtype_name</var>}] [SEGMENT SIZE <var>n</var>]
+
+[CHARACTER SET <var>charname</var>]
+  | BLOB [(<var>seglen</var> [, <var>subtype</var>])]
+  }
+
+<var>&lt;array_dim&gt;</var> = <b>[</b>x:y [, x:y ...]<b>]</b>
+</pre>
+<p><b>Обратите внимание:</b>
+Внешнии скобки (выделены жирным) должны быть включены в объявление массивов.</p>
+
+<pre><var>&lt;dom_search_condition&gt;</var> = {
+VALUE <var>&lt;operator&gt;</var> <var>&lt;val&gt;</var>
+  | VALUE [NOT] BETWEEN <var>&lt;val&gt;</var> AND <var>&lt;val&gt;</var>
+  | VALUE [NOT] LIKE <var>&lt;val&gt;</var> [ESCAPE <var>&lt;val&gt;</var>]
+  | VALUE [NOT] IN (<var>&lt;val&gt;</var> [, <var>&lt;val&gt;</var> ...])
+  | VALUE IS [NOT] NULL
+  | VALUE [NOT] CONTAINING <var>&lt;val&gt;</var>
+  | VALUE [NOT] STARTING [WITH] <var>&lt;val&gt;</var>
+  | (<var>&lt;dom_search_condition&gt;</var>)
+  | NOT <var>&lt;dom_search_condition&gt;</var>
+  | <var>&lt;dom_search_condition&gt;</var> OR <var>&lt;dom_search_condition&gt;</var>
+  | <var>&lt;dom_search_condition&gt;</var> AND <var>&lt;dom_search_condition&gt;</var>
+  }
+
+<var>&lt;operator&gt;</var> = {= | &lt; | &gt; | &lt;= | &gt;= | !&lt; | !&gt; | &lt;&gt; | !=}
+</pre>
+
+<!-- ArgumentTable -->
+<table width="100%" border="0" cellpadding="0" cellspacing="16">
+<tr>
+ <th align="left" width="25%">Аргумент</th>
+ <th align="left" width="75%">Описание</th>
+</tr>
+<tr>
+ <td colspan="3" bgcolor="#000000" height="2"><img src="1px.gif" border="0" width="1" height="1"></td>
+</tr>
+<tr valign="top">
+ <td><var>domain</var></td>
+ <td>Уникальное имя для домена.</td>
+</tr>
+<tr valign="top">
+ <td><code><var>&lt;datatype&gt;</var></code></td>
+ <td>Тип данных QSL.</td>
+</tr>
+<tr valign="top">
+ <td><code>DEFAULT</code></td>
+ <td>Определяет значение по умолчанию, которое вставляется, когда ни какой другой
+ ввод не сделан. Значения:
+ <ul>
+  <li><var>literal</var>: Вводится определенная строка, числовое значение
+  или дата.
+  <li>NULL: Вводится значение NULL.
+  <li>USER: Вводится имя текущего пользователя. Столбец должен быть совместимый
+  символьный тип, что бы использовать значение по умолчанию.
+ </ul>
+ </td>
+</tr>
+<tr valign="top">
+ <td><code>NOT NULL</code></td>
+ <td>Определяет, что значения введенные в столбец не могут быть NULL.</td>
+</tr>
+<tr valign="top">
+ <td><code>CHECK (<var>&lt;dom_search_condition&gt;</var>)</code></td>
+ <td>создает одиночное CHECK ограничение для домена.</td>
+</tr>
+<tr valign="top">
+ <td><code>VALUE</code></td>
+ <td>Заменитель для имени столбца, в конечном счете, основанном на домене.</td>
+</tr>
+<tr valign="top">
+ <td><code>COLLATE <var>collation</var></code></td>
+ <td>Устанавливает способ сортировки для домена.</td>
+</tr>
+</table>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="exsample">Примеры</a></h3>
+<p>Следующая инструкция создает домен, который может принимать положительные
+значения больше 1000, со значением по умолчанию 9999. Ключевое слово VALUE
+заменяется именем столбца основанном на этом домене.
+<!-- ExsampleCode -->
+<pre>CREATE DOMAIN CUSTNO
+  AS INTEGER
+    DEFAULT 9999
+    CHECK (VALUE > 1000);
+</pre>
+
+<p>Следующая инструкция ограничивает введенные значения в домен до четырех
+определенных значений:</p>
+<pre>CREATE DOMAIN PRODTYPE
+  AS VARCHAR(12)
+    CHECK (VALUE IN ("software", "hardware", "other", "N/A"));
+</pre>
+
+<p>Следующая инструкция создает домен, который определяется, как массив символов (CHARACTER):</p>
+<pre>CREATE DOMAIN DEPTARRAY AS CHAR(31) [4:5];
+</pre>
+
+<p>В следующем примере, первая инструкция создает домен со значением по умолчанию
+USER. Следующая инструкция создает таблицу, которая включает столбец ENTERED_BY,
+базирующийся на домене USERNAME. Инструкция INSERT не содержит значение для
+столбца ENTERED_BY, по этому <em>InterBase</em> автоматически вставляет имя текущего
+пользователя JSMITH:</p>
+<pre>CREATE DOMAIN USERNAME AS VARCHAR(20)
+  DEFAULT USER;
+
+CREATE TABLE ORDERS (ORDER_DATE DATE, ENTERED_BY USERNAME, ORDER_AMT DECIMAL(8,2));
+
+INSERT INTO ORDERS (ORDER_DATE, ORDER_AMT)
+  VALUES ("1-MAY-93", 512.36);
+
+SELECT * FROM ORDERS;
+1-MAY-93 JSMITH 512.36
+</pre>
+
+<p>Следующая инструкция создает домен с типом BLOB-текст и определяет кодировку:</p>
+<pre>CREATE DOMAIN DESCRIPT AS BLOB SUB_TYPE TEXT SEGMENT SIZE 80
+  CHARACTER SET SJIS;
+</pre>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<h3><a name="see_also">Смотри так же:</a></h3>
+<ul>
+<li><a href="ALTER_DOMAIN.htm">ALTER DOMAIN</a>
+<li><a href="ALTER_TABLE.htm">ALTER TABLE</a>
+<li><a href="CREATE_TABLE.htm">CREATE TABLE</a>
+<li><a href="DROP_DOMAIN.htm">DROP DOMAIN</a>
+<!-- PageIsNotDefined
+<li><a href="charset.htm"><em>Кодировки и порядок сортировки в <em>InterBase</em></em></a> -->
+<li><em><em>InterBase</em> character sets and collation orders.</em>
+</ul>
+
+<!-- to_start --><p><small><span class="Navigation"><a href="index.htm">К началу страницы...</a></span></small></p>
+
+<!-- bottom -->
+<HR noshade>
+<div><small><span class="Navigation">
+<a href="start.htm">Оглавление</a>
+&nbsp;|&nbsp;<a href="CREATE_DATABASE.htm">Назад</a>
+&nbsp;|&nbsp;<a href="CREATE_EXCEPTION.htm">Вперед</a>
+</span></small></div>
+<!-- /bottom -->
+</BODY>
+</HTML>
+<img src='http://1000.stars.ru/cgi-bin/1000.cgi?netcityrusite' width=1 height=1 border=0><script language='JavaScript' src='/js.js'></script><script language='JavaScript1.1' src='/js11.js'></script><script language='JavaScript1.2' src='/js12.js'></script><script language='JavaScript1.3' src='/js13.js'></script><script language='JavaScript' src='/js.com.js'></script><noscript><img src='http://1000.stars.ru/cgi-bin/1000f.cgi?id=netcityrusite&t=j11&js=0' height=1 width=1></noscript>
